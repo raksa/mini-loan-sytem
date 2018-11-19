@@ -40,4 +40,22 @@ class LoanController extends Controller
             "error" => trans('default.save_loan_fail'),
         ], 500);
     }
+
+    /**
+     * Get loan list
+     * Get loan if loan's id is specified
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Components\MiniAspire\Modules\Loan\Loan::ID $id
+     */
+    public function apiGetLoan(Request $request, $id = null)
+    {
+        $loan = Loan::find($id);
+        if ($loan) {
+            return new LoanResource($loan);
+        }
+        return new LoanCollection(Loan::filterLoan([
+            'perPage' => $request->get('perPage') ?? 10,
+        ]));
+    }
 }

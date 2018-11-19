@@ -45,4 +45,14 @@ class Loan extends Model
     {
         $this->{self::AMOUNT} = $data[self::AMOUNT];
     }
+
+    /**
+     * Filter loan as pagination
+     */
+    public static function filterLoan($data = [])
+    {
+        $result = self::orderBy(self::ID, 'desc');
+        $loans = $result->paginate($data['perPage']);
+        return $loans;
+    }
 }
