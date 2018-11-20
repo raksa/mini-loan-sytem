@@ -24,6 +24,8 @@ class LoanCalculator
         $bag = [];
         if (LoanType::isStandard($typeId)) {
 
+            // Base simple explain
+            // with the most typical formula https://en.wikipedia.org/wiki/Loan
             $realMonthlyInterestRate = $monthlyInterestRate / 100;
             $result = $loanAmount * $realMonthlyInterestRate * \pow(1 + $realMonthlyInterestRate, $repaymentMonthNumber);
             $result = $result / (\pow(1 + $realMonthlyInterestRate, $repaymentMonthNumber) - 1);
