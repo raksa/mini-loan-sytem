@@ -1,5 +1,5 @@
 <?php
-namespace App\Components\MiniAspire\Modules\Loan;
+namespace App\Components\MiniAspire\Modules\Repayment;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -7,20 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 /*
  * Author: Raksa Eng
  */
-class Loan extends Model
+class Repayment extends Model
 {
 
-    const TABLE_NAME = 'loans';
+    const TABLE_NAME = 'repayments';
 
     const ID = 'id';
+    const LOAN_ID = 'loan_id';
     const AMOUNT = 'amount';
-    const DURATION = 'duration';
-    const REPAYMENT_FREQUENCY = 'repayment_frequency';
-    const INTEREST_RATE = 'interest_rate';
-    const ARRANGEMENT_FEE = 'arrangement_fee';
+    const PAYMENT_STATUS = 'payment_status';
+    const DUE_DATE = 'due_date';
+    const DATE_OF_PAYMENT = 'date_of_payment';
     const REMARKS = 'remarks';
-    const DATE_CONTRACT_START = 'date_contract_start';
-    const DATE_CONTRACT_END = 'date_contract_end';
     const LAST_UPDATED = 'last_updated';
     const CREATED = 'created';
 
@@ -54,12 +52,12 @@ class Loan extends Model
     }
 
     /**
-     * Filter loan as pagination
+     * Filter repayment as pagination
      */
-    public static function filterLoan($data = [])
+    public static function filterRepayment($data = [])
     {
         $result = self::orderBy(self::ID, 'desc');
-        $loans = $result->paginate($data['perPage']);
-        return $loans;
+        $repayments = $result->paginate($data['perPage']);
+        return $repayments;
     }
 }
