@@ -1,6 +1,8 @@
 <?php
 namespace App\Components\MiniAspire\Modules\Loan;
 
+use App\Components\MiniAspire\Modules\User\User;
+use App\Components\MiniAspire\Modules\Repayment\Repayment;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -64,6 +66,26 @@ class Loan extends Model
         $this->{self::REMARKS} = $data[self::REMARKS];
         $this->{self::DATE_CONTRACT_START} = $data[self::DATE_CONTRACT_START];
         $this->{self::DATE_CONTRACT_END} = $data[self::DATE_CONTRACT_END];
+    }
+
+    /**
+     * Association one to many, one loan can belong to many repayments.
+     */
+    public function repayments()
+    {
+        return $this->hasMany(Repayment::class,
+            Repayment::LOAN_ID,
+            self::ID);
+    }
+
+    /**
+     * Association many to one, many loans can have same one user.
+     */
+    public function user()
+    {
+        return $this->hasOne(User::class,
+            User::ID,
+            self::USER_ID);
     }
 
     /**

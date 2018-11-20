@@ -1,6 +1,7 @@
 <?php
 namespace App\Components\MiniAspire\Modules\Repayment;
 
+use App\Components\MiniAspire\Modules\Loan\Loan;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -48,7 +49,22 @@ class Repayment extends Model
 
     public function setProps($data)
     {
+        $this->{self::LOAN_ID} = $data[self::LOAN_ID];
         $this->{self::AMOUNT} = $data[self::AMOUNT];
+        $this->{self::PAYMENT_STATUS} = $data[self::PAYMENT_STATUS];
+        $this->{self::DUE_DATE} = $data[self::DUE_DATE];
+        $this->{self::DATE_OF_PAYMENT} = $data[self::DATE_OF_PAYMENT];
+        $this->{self::REMARKS} = $data[self::REMARKS];
+    }
+
+    /**
+     * Association many to one, many repayments can have same one loan.
+     */
+    public function loan()
+    {
+        return $this->hasOne(Loan::class,
+            Loan::ID,
+            self::LOAN_ID);
     }
 
     /**

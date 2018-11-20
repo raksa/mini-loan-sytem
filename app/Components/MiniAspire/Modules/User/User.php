@@ -1,6 +1,7 @@
 <?php
 namespace App\Components\MiniAspire\Modules\User;
 
+use App\Components\MiniAspire\Modules\Loan\Loan;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -62,6 +63,16 @@ class User extends Model
         $this->{self::LAST_NAME} = $data[self::LAST_NAME];
         $this->{self::PHONE_NUMBER} = $data[self::PHONE_NUMBER];
         $this->{self::ADDRESS} = $data[self::ADDRESS];
+    }
+
+    /**
+     * Association one to many, one user can belong to many loans.
+     */
+    public function loans()
+    {
+        return $this->hasMany(Loan::class,
+            Loan::USER_ID,
+            self::ID);
     }
 
     /**
