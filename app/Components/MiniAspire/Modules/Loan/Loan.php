@@ -13,6 +13,7 @@ class Loan extends Model
     const TABLE_NAME = 'loans';
 
     const ID = 'id';
+    const USER_ID = 'user_id';
     const AMOUNT = 'amount';
     const DURATION = 'duration';
     const REPAYMENT_FREQUENCY = 'repayment_frequency';
@@ -39,6 +40,10 @@ class Loan extends Model
     {
         return $this->{self::AMOUNT};
     }
+    public function getDuration()
+    {
+        return $this->{self::DURATION};
+    }
     public function getLastUpdatedTime()
     {
         return new Carbon($this->{self::LAST_UPDATED}) . '';
@@ -50,7 +55,15 @@ class Loan extends Model
 
     public function setProps($data)
     {
+        $this->{self::USER_ID} = $data[self::USER_ID];
         $this->{self::AMOUNT} = $data[self::AMOUNT];
+        $this->{self::DURATION} = $data[self::DURATION];
+        $this->{self::REPAYMENT_FREQUENCY} = $data[self::REPAYMENT_FREQUENCY];
+        $this->{self::INTEREST_RATE} = $data[self::INTEREST_RATE];
+        $this->{self::ARRANGEMENT_FEE} = $data[self::ARRANGEMENT_FEE];
+        $this->{self::REMARKS} = $data[self::REMARKS];
+        $this->{self::DATE_CONTRACT_START} = $data[self::DATE_CONTRACT_START];
+        $this->{self::DATE_CONTRACT_END} = $data[self::DATE_CONTRACT_END];
     }
 
     /**
