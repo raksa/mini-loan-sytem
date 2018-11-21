@@ -22,16 +22,16 @@ class RepaymentFrequency
         'description' => 'Weekly repayment frequency',
     ];
 
-    public static function isMonthly($repaymentId)
+    public static function isMonthly($typeId)
     {
-        return $repaymentId == self::MONTHLY['id'];
+        return $typeId == self::MONTHLY['id'];
     }
-    public static function isFortnightly($repaymentId)
+    public static function isFortnightly($typeId)
     {
-        return $repaymentId == self::FORTNIGHTLY['id'];
+        return $typeId == self::FORTNIGHTLY['id'];
     }
-    public static function isWeekly($repaymentId)
+    public static function isWeekly($typeId)
     {
-        return $repaymentId == self::WEEKLY['id'];
+        return $typeId == self::WEEKLY['id'];
     }
 }
