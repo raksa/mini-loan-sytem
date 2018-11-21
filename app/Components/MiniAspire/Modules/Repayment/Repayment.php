@@ -45,6 +45,9 @@ class Repayment extends Model
     public function setPaymentStatusId($statusId)
     {
         $this->{self::PAYMENT_STATUS} = $statusId;
+        if (RepaymentStatus::isPaid($statusId)) {
+            $this->{self::DATE_OF_PAYMENT} = Carbon::now();
+        }
     }
     public function getDueDate()
     {
@@ -57,6 +60,10 @@ class Repayment extends Model
     public function getRemarks()
     {
         return $this->{self::REMARKS};
+    }
+    public function setRemarks($remarks)
+    {
+        $this->{self::REMARKS} = $remarks;
     }
     public function getLastUpdatedTime()
     {

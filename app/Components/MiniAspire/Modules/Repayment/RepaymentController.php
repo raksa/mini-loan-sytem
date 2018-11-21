@@ -112,6 +112,7 @@ class RepaymentController extends Controller
             ], 400);
         }
         $repayment->setPaymentStatusId(RepaymentStatus::PAID["id"]);
+        $repayment->setRemarks($request->get('remarks'));
         try {
             if ($repayment->save()) {
                 DB::commit();
