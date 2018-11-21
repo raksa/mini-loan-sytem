@@ -6,6 +6,7 @@ use App\Components\MiniAspire\Modules\Loan\Loan;
 use App\Helpers\LoanCalculator;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 // TODO: comment some complexity parts
@@ -90,7 +91,7 @@ class RepaymentController extends Controller
      * Pay for repayment
      *
      * @param \Illuminate\Http\Request $request
-     * @param Repayment::ID $id
+     * @param \App\Components\MiniAspire\Modules\Repayment\Repayment::ID $id
      */
     public function apiPay(Request $request, $id)
     {
@@ -111,7 +112,6 @@ class RepaymentController extends Controller
             ], 400);
         }
         $repayment->setPaymentStatusId(RepaymentStatus::PAID["id"]);
-        $repayment->setProps($request->all());
         try {
             if ($repayment->save()) {
                 DB::commit();
@@ -135,16 +135,12 @@ class RepaymentController extends Controller
      * @param \Illuminate\Http\Request $request
      * @param \App\Components\MiniAspire\Modules\Repayment\Repayment::ID $id
      */
-    public function apiGetRepayment(Request $request, $id = null)
+    public function apiGetRepayment(Request $request, $id)
     {
         $repayment = Repayment::find($id);
-        if ($repayment) {
-            return new RepaymentResource($repayment);
+        if (!$repayment) {
+            return response()->json(['message' => trans('default.repayment_not_found')], 404);
         }
-        $loan = Loan::find($request->get("loanId"));
-        if (!$loan) {
-            return response()->json(["message" => trans("default.loan_not_found")], 404);
-        }
-        return new RepaymentCollection($loan->repayments);
+        return new RepaymentResource($repayment);
     }
 }

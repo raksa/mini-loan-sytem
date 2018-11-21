@@ -67,14 +67,7 @@ class LoanController extends Controller
      */
     public function apiGetLoan(Request $request, $id)
     {
-        $user = User::find($id);
-        if (!$user) {
-            return response()->json([
-                "status" => "success",
-                "message" => trans('default.user_not_found'),
-            ], 404);
-        }
-        $loan = Loan::find($request->get('loanId'));
+        $loan = Loan::find($id);
         if ($loan) {
             return new LoanResource($loan);
         }

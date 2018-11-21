@@ -2,6 +2,7 @@
 
 namespace App\Components\MiniAspire\Modules\Repayment;
 
+use App\Components\MiniAspire\Modules\User\UserResource;
 use Illuminate\Http\Resources\Json\Resource;
 
 class RepaymentResource extends Resource
