@@ -6,13 +6,9 @@
 
 ## Install Dependencies for Development
 * `$ composer install`
-* `$ npm install`
-* `$ npm run bower:install-dep`
 
 ## Install Dependencies for Production
 * `$ composer install --no-dev`
-* `$ npm install --production`
-* `$ npm run bower:install-dep`
 
 ## Migrate Database for very first time (after create database time)
 attention: this will remove everything in database
