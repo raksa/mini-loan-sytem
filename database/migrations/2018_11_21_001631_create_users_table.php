@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string(User::USER_CODE, 20)->unique();
             $table->string(User::FIRST_NAME, 50);
             $table->string(User::LAST_NAME, 50);
-            $table->string(User::PHONE_NUMBER, 50);
+            $table->string(User::PHONE_NUMBER, 50)->unique();
             $table->longText(User::ADDRESS)->nullable();
             $table->timestamp(User::LAST_UPDATED)->default(
                 DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP')
