@@ -42,7 +42,7 @@ class Loan extends Model
     {
         return $this->{self::AMOUNT};
     }
-    public function getDuration()
+    public function getMonthsDuration()
     {
         return $this->{self::DURATION};
     }
