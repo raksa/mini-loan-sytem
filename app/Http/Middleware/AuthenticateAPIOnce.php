@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
  */
 class AuthenticateAPIOnce
 {
-    const AUTH_HASH_PREFIX = 'Hash:';
+    const AUTH_HASH_PREFIX = "Hash:";
     const DELAY_SECOND = 10;
     /**
      * Handle an incoming request.
@@ -28,7 +28,7 @@ class AuthenticateAPIOnce
         $data = $request->all();
         $authKey = Util::getHeaderAuthentication($request);
         $matches = [];
-        if (\preg_match('/' . self::AUTH_HASH_PREFIX . '(\w+)/', $authKey, $matches)) {
+        if (\preg_match("/" . self::AUTH_HASH_PREFIX . "(\w+)/", $authKey, $matches)) {
             $hash = $matches[1];
             $timestamp = Carbon::now()->getTimestamp();
             $text = static::dataToString($data);
@@ -39,16 +39,16 @@ class AuthenticateAPIOnce
                 }
             }
         }
-        return response()->json(["message" => trans('default.not_allow_api')], 401);
+        return response()->json(["message" => trans("default.not_allow_api")], 401);
     }
     private static function arrayToKeyValueString($data)
     {
         if (\is_string($data) || \is_numeric($data)) {
-            return $data . '';
+            return $data . "";
         }
         $data = (array) $data;
-        $text = \join('&', \array_map(function ($item) use ($data) {
-            return $item . '=' . static::arrayToKeyValueString($data[$item]);
+        $text = \join("&", \array_map(function ($item) use ($data) {
+            return $item . "=" . static::arrayToKeyValueString($data[$item]);
         }, \array_sort(\array_keys($data))));
         return $text;
     }
@@ -58,9 +58,9 @@ class AuthenticateAPIOnce
         $text = static::arrayToKeyValueString($data);
         return $text;
     }
-    public static function genTokenHash($text = '', $salt)
+    public static function genTokenHash($text = "", $salt)
     {
-        $saltString = '$1$' . $salt . '$'; //MD5 algorithm
+        $saltString = "$1$" . $salt . "$"; //MD5 algorithm
         $crypted = \crypt($text, $saltString);
         $cryptedString = \substr(\crypt($text, $saltString), strlen($saltString));
         $encrypted = \base64_encode($cryptedString);

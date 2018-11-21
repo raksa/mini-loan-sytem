@@ -25,6 +25,7 @@ class LoanController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 "status" => "error",
+                "message" => trans("default.validation_error"),
                 "errors" => $validator->errors(),
             ], 400);
         }
@@ -41,13 +42,13 @@ class LoanController extends Controller
         DB::rollBack();
         return response()->json([
             "status" => "error",
-            "message" => trans('default.saving_fail'),
+            "message" => trans("default.saving_fail"),
         ], 500);
     }
 
     /**
      * Get loan list
-     * Get loan if loan's id is specified
+     * Get loan if loan"s id is specified
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Components\MiniAspire\Modules\Loan\Loan::ID $id
@@ -59,7 +60,7 @@ class LoanController extends Controller
             return new LoanResource($loan);
         }
         return new LoanCollection(Loan::filterLoan([
-            'perPage' => $request->get('perPage') ?? 10,
+            "perPage" => $request->get("perPage") ?? 10,
         ]));
     }
 }

@@ -81,7 +81,7 @@ class User extends Model
         $this->{self::FIRST_NAME} = $data[self::FIRST_NAME];
         $this->{self::LAST_NAME} = $data[self::LAST_NAME];
         $this->{self::PHONE_NUMBER} = $data[self::PHONE_NUMBER];
-        $this->{self::ADDRESS} = $data[self::ADDRESS];
+        isset($data[self::ADDRESS]) && ($this->{self::ADDRESS} = $data[self::ADDRESS]);
     }
 
     /**

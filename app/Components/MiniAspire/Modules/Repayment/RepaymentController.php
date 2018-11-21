@@ -49,7 +49,7 @@ class RepaymentController extends Controller
             if (!static::createRepayment($bag, [
                 Repayment::LOAN_ID => $loan->getId(),
                 Repayment::AMOUNT => $amount,
-                Repayment::PAYMENT_STATUS => RepaymentStatus::UNPAID['id'],
+                Repayment::PAYMENT_STATUS => RepaymentStatus::UNPAID["id"],
                 Repayment::DUE_DATE => $dueDate,
                 Repayment::DATE_OF_PAYMENT => null,
                 Repayment::REMARKS => null,
@@ -70,8 +70,8 @@ class RepaymentController extends Controller
             RepaymentRequest::staticMessages());
         if ($validator->fails()) {
             $bag = [
-                'message' => trans('default.validation_error'),
-                'errors' => $validator->errors(),
+                "message" => trans("default.validation_error"),
+                "errors" => $validator->errors(),
             ];
             return null;
         }
@@ -81,7 +81,7 @@ class RepaymentController extends Controller
             return $repayment;
         }
         $bag = [
-            'message' => trans('default.saving_fail'),
+            "message" => trans("default.saving_fail"),
         ];
         return null;
     }
@@ -100,17 +100,17 @@ class RepaymentController extends Controller
             DB::rollBack();
             return response()->json([
                 "status" => "error",
-                "message" => trans('default.repayment_not_found'),
+                "message" => trans("default.repayment_not_found"),
             ], 404);
         }
         if (RepaymentStatus::isPaid($repayment->getPaymentStatusId())) {
             DB::rollBack();
             return response()->json([
                 "status" => "error",
-                "message" => trans('default.repayment_already_paid'),
+                "message" => trans("default.repayment_already_paid"),
             ], 400);
         }
-        $repayment->setPaymentStatusId(RepaymentStatus::PAID['id']);
+        $repayment->setPaymentStatusId(RepaymentStatus::PAID["id"]);
         $repayment->setProps($request->all());
         try {
             if ($repayment->save()) {
@@ -124,13 +124,13 @@ class RepaymentController extends Controller
         DB::rollBack();
         return response()->json([
             "status" => "error",
-            "error" => trans('default.saving_fail'),
+            "error" => trans("default.saving_fail"),
         ], 500);
     }
 
     /**
      * Get repayment list
-     * Get repayment if repayment's id is specified
+     * Get repayment if repayment"s id is specified
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Components\MiniAspire\Modules\Repayment\Repayment::ID $id
@@ -141,9 +141,9 @@ class RepaymentController extends Controller
         if ($repayment) {
             return new RepaymentResource($repayment);
         }
-        $loan = Loan::find($request->get('loanId'));
+        $loan = Loan::find($request->get("loanId"));
         if (!$loan) {
-            return response()->json(['message' => trans('default.loan_not_found')], 404);
+            return response()->json(["message" => trans("default.loan_not_found")], 404);
         }
         return new RepaymentCollection($loan->repayments);
     }

@@ -23,27 +23,27 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 "status" => "error",
+                "message" => trans("default.validation_error"),
                 "errors" => $validator->errors(),
             ], 400);
         }
         $user = new User();
-        $user->setProps([
-            User::AMOUNT => $request->get(User::AMOUNT),
-        ]);
+        $user->setProps($request->all());
         if ($user->save()) {
             return response()->json([
                 "status" => "success",
+                "user" => new UserResource($user),
             ], 200);
         }
         return response()->json([
             "status" => "error",
-            "error" => trans('default.save_user_fail'),
+            "message" => trans("default.save_user_fail"),
         ], 500);
     }
 
     /**
      * Get user list
-     * Get user if user's id is specified
+     * Get user if user"s id is specified
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Components\MiniAspire\Modules\User\User::ID $id
@@ -55,7 +55,7 @@ class UserController extends Controller
             return new UserResource($user);
         }
         return new UserCollection(User::filterUser([
-            'perPage' => $request->get('perPage') ?? 10,
+            "perPage" => $request->get("perPage") ?? 10,
         ]));
     }
 }
