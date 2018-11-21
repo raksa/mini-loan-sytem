@@ -22,9 +22,8 @@ class LoanRequest extends FormRequest
 
     public static function staticRules()
     {
-        // TODO: update validation rules
+        // FIXME: update validation rules
         return [
-            Loan::AMOUNT => 'required|numeric',
         ];
     }
 
@@ -40,8 +39,6 @@ class LoanRequest extends FormRequest
     public static function staticMessages()
     {
         return [
-            Loan::AMOUNT . 'required' => trans('default.loan_amount_required'),
-            Loan::AMOUNT . 'numeric' => trans('default.loan_amount_numeric'),
         ];
     }
 }

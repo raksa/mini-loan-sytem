@@ -22,9 +22,8 @@ class RepaymentRequest extends FormRequest
 
     public static function staticRules()
     {
-        // TODO: update validation rules
+        // FIXME: update validation rules
         return [
-            Repayment::AMOUNT => 'required|numeric',
         ];
     }
 
@@ -40,8 +39,6 @@ class RepaymentRequest extends FormRequest
     public static function staticMessages()
     {
         return [
-            Repayment::AMOUNT . 'required' => trans('default.repayment_amount_required'),
-            Repayment::AMOUNT . 'numeric' => trans('default.repayment_amount_numeric'),
         ];
     }
 }

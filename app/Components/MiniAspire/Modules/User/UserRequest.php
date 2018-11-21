@@ -22,9 +22,8 @@ class UserRequest extends FormRequest
 
     public static function staticRules()
     {
-        // TODO: update validation rules
+        // FIXME: update validation rules
         return [
-            User::FIRST_NAME => 'required',
         ];
     }
 
@@ -40,7 +39,6 @@ class UserRequest extends FormRequest
     public static function staticMessages()
     {
         return [
-            User::FIRST_NAME . 'required' => trans('default.user_first_name_required'),
         ];
     }
 }
