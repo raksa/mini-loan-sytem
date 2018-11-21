@@ -39,13 +39,16 @@ class RepaymentController extends Controller
         $startDate = $loan->getDateContractStart();
         $endDate = $loan->getDateContractEnd();
         $dueDate = $startDate->copy();
-        while ($dueDate->lessThanOrEqualTo($endDate)) {
+        while (true) {
             if (RepaymentFrequency::isMonthly($frequencyType)) {
                 $dueDate = $dueDate->copy()->addMonth(1);
             } else if (RepaymentFrequency::isFortnightly($frequencyType)) {
                 $dueDate = $dueDate->copy()->addWeek(2);
             } else {
                 $dueDate = $dueDate->copy()->addWeek(1);
+            }
+            if ($dueDate->greaterThan($endDate)) {
+                break;
             }
             if (!static::createRepayment($bag, [
                 Repayment::LOAN_ID => $loan->getId(),
