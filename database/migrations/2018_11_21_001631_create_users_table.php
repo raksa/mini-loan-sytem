@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string(User::FIRST_NAME, 50);
             $table->string(User::LAST_NAME, 50);
             $table->string(User::PHONE_NUMBER, 50);
-            $table->longText(User::ADDRESS);
+            $table->longText(User::ADDRESS)->nullable();
             $table->timestamp(User::LAST_UPDATED)->default(
                 DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP')
             );

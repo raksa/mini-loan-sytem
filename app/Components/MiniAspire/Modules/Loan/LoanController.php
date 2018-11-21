@@ -3,6 +3,7 @@
 namespace App\Components\MiniAspire\Modules\Loan;
 
 use App\Components\MiniAspire\Modules\Repayment\RepaymentController;
+use App\Components\MiniAspire\Modules\Repayment\RepaymentFrequency;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -60,7 +61,23 @@ class LoanController extends Controller
             return new LoanResource($loan);
         }
         return new LoanCollection(Loan::filterLoan([
-            "perPage" => $request->get("perPage") ?? 10,
+            "perPage" => $request->get("perPage") ?? 20,
         ]));
+    }
+
+    /**
+     * Get loan frequency type
+     *
+     * @param \Illuminate\Http\Request $request
+     */
+    public function apiGetFreqType(Request $request)
+    {
+        return response()->json([
+            "types" => [
+                RepaymentFrequency::MONTHLY['id'] => RepaymentFrequency::MONTHLY['name'],
+                RepaymentFrequency::FORTNIGHTLY['id'] => RepaymentFrequency::FORTNIGHTLY['name'],
+                RepaymentFrequency::WEEKLY['id'] => RepaymentFrequency::WEEKLY['name'],
+            ],
+        ], 200);
     }
 }

@@ -32,7 +32,7 @@ class UserController extends Controller
         if ($user->save()) {
             return response()->json([
                 "status" => "success",
-                "user" => new UserResource($user),
+                "user" => new UserResource($user->refresh()),
             ], 200);
         }
         return response()->json([
@@ -55,7 +55,7 @@ class UserController extends Controller
             return new UserResource($user);
         }
         return new UserCollection(User::filterUser([
-            "perPage" => $request->get("perPage") ?? 10,
+            "perPage" => $request->get("perPage") ?? 20,
         ]));
     }
 }

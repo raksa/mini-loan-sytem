@@ -14,7 +14,7 @@ class RepaymentCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return $this->resource->map(function ($repayment) {
+        return $this->resource->map(function ($repayment, $request) {
             return (new RepaymentResource($repayment))->toArray($request);
         });
     }

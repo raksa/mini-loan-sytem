@@ -45,7 +45,7 @@ class User extends Model
         }
         $userCode = $latestUserRecord->getUserCode();
         while (true) {
-            if (!self::where(self::USER_CODE, ++$userCode)->exist()) {
+            if (!self::where(self::USER_CODE, ++$userCode)->exists()) {
                 break;
             }
         }
@@ -82,6 +82,7 @@ class User extends Model
         $this->{self::LAST_NAME} = $data[self::LAST_NAME];
         $this->{self::PHONE_NUMBER} = $data[self::PHONE_NUMBER];
         isset($data[self::ADDRESS]) && ($this->{self::ADDRESS} = $data[self::ADDRESS]);
+        $this->{self::USER_CODE} = static::generateUserCode();
     }
 
     /**

@@ -14,7 +14,7 @@ class LoanCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return $this->resource->map(function ($loan) {
+        return $this->resource->map(function ($loan, $request) {
             return (new LoanResource($loan))->toArray($request);
         });
     }
