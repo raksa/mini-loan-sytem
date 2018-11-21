@@ -104,4 +104,15 @@ class User extends Model
         $users = $result->paginate($data['perPage']);
         return $users;
     }
+
+    /**
+     * Force delete this record
+     */
+    public function deleteThis()
+    {
+        foreach ($this->loans as $loan) {
+            $loan->deleteThis();
+        }
+        $this->delete();
+    }
 }

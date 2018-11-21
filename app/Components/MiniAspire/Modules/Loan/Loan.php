@@ -123,4 +123,15 @@ class Loan extends Model
         $loans = $result->paginate($data['perPage']);
         return $loans;
     }
+
+    /**
+     * Force delete this record
+     */
+    public function deleteThis()
+    {
+        foreach ($this->repayments as $repayment) {
+            $repayment->delete();
+        }
+        $this->delete();
+    }
 }

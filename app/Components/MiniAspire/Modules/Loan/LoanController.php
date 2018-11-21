@@ -84,11 +84,7 @@ class LoanController extends Controller
     public function apiGetFreqType(Request $request)
     {
         return response()->json([
-            "types" => [
-                RepaymentFrequency::MONTHLY['id'] => RepaymentFrequency::MONTHLY['name'],
-                RepaymentFrequency::FORTNIGHTLY['id'] => RepaymentFrequency::FORTNIGHTLY['name'],
-                RepaymentFrequency::WEEKLY['id'] => RepaymentFrequency::WEEKLY['name'],
-            ],
+            "types" => RepaymentFrequency::toArrayForApi(),
         ], 200);
     }
 }

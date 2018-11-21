@@ -34,4 +34,13 @@ class RepaymentFrequency
     {
         return $typeId == self::WEEKLY['id'];
     }
+
+    public static function toArrayForApi()
+    {
+        return [
+            self::MONTHLY['id'] => self::MONTHLY['name'],
+            self::FORTNIGHTLY['id'] => self::FORTNIGHTLY['name'],
+            self::WEEKLY['id'] => self::WEEKLY['name'],
+        ];
+    }
 }
