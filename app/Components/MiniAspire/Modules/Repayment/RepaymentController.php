@@ -19,7 +19,7 @@ class RepaymentController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      */
-    private static function generateRepayments(&$bag, Loan $loan)
+    public static function generateRepayments(&$bag, Loan $loan)
     {
         $frequencyType = $loan->getRepaymentFrequencyTypeId();
         $monthDuration = $loan->getMonthsDuration();
@@ -76,7 +76,7 @@ class RepaymentController extends Controller
             return null;
         }
         $repayment = new Repayment();
-        $repayment->setProps($bag);
+        $repayment->setProps($data);
         if ($repayment->save()) {
             return $repayment;
         }

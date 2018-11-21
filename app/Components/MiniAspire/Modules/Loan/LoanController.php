@@ -4,6 +4,7 @@ namespace App\Components\MiniAspire\Modules\Loan;
 
 use App\Components\MiniAspire\Modules\Repayment\RepaymentController;
 use App\Components\MiniAspire\Modules\Repayment\RepaymentFrequency;
+use App\Components\MiniAspire\Modules\User\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -18,10 +19,19 @@ class LoanController extends Controller
      * Create loan via api
      *
      * @param \Illuminate\Http\Request $request
+     * @param \App\Components\MiniAspire\Modules\User\User:ID $id
      */
-    public function apiCreateLoan(Request $request)
+    public function apiCreateLoan(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), LoanRequest::staticRules(),
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json([
+                "status" => "success",
+                "message" => trans('default.user_not_found'),
+            ], 404);
+        }
+        $data = $request->all();
+        $validator = Validator::make($data, LoanRequest::staticRules(),
             LoanRequest::staticMessages());
         if ($validator->fails()) {
             return response()->json([
@@ -32,12 +42,13 @@ class LoanController extends Controller
         }
         DB::beginTransaction();
         $loan = new Loan();
-        $loan->setProps($request->all());
+        $data[Loan::USER_ID] = $id;
+        $loan->setProps($data);
         if ($loan->save() && RepaymentController::generateRepayments($bag, $loan)) {
             DB::commit();
             return response()->json([
                 "status" => "success",
-                "loan" => new LoanResource($loan),
+                "loan" => new LoanResource($loan->refresh()),
             ], 200);
         }
         DB::rollBack();
@@ -52,11 +63,18 @@ class LoanController extends Controller
      * Get loan if loan"s id is specified
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Components\MiniAspire\Modules\Loan\Loan::ID $id
+     * @param \App\Components\MiniAspire\Modules\User\User:ID $id
      */
-    public function apiGetLoan(Request $request, $id = null)
+    public function apiGetLoan(Request $request, $id)
     {
-        $loan = Loan::find($id);
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json([
+                "status" => "success",
+                "message" => trans('default.user_not_found'),
+            ], 404);
+        }
+        $loan = Loan::find($request->get('loanId'));
         if ($loan) {
             return new LoanResource($loan);
         }
