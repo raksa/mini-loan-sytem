@@ -82,14 +82,4 @@ class Repayment extends Model
             Loan::ID,
             self::LOAN_ID);
     }
-
-    /**
-     * Filter repayment as pagination
-     */
-    public static function filterRepayment($data = [])
-    {
-        $result = self::orderBy(self::ID, 'desc');
-        $repayments = $result->paginate($data['perPage']);
-        return $repayments;
-    }
 }

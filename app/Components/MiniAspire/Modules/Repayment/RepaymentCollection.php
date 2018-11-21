@@ -17,8 +17,7 @@ class RepaymentCollection extends ResourceCollection
         $repayments = $this->resource;
         $repaymentsArray = [];
         foreach ($repayments as $repayment) {
-            $array = $repayment->toArray();
-            $repaymentsArray[] = $array;
+            $repaymentsArray[] = new RepaymentResource($repayment);
         }
         return $repaymentsArray;
     }

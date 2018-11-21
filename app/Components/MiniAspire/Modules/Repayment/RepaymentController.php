@@ -16,29 +16,26 @@ class RepaymentController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      */
-    public function apiCreateRepayment(Request $request)
+    public static function createRepayment(&$bag, $data)
     {
-        $validator = Validator::make($request->all(), RepaymentRequest::staticRules(),
+        $validator = Validator::make($data, RepaymentRequest::staticRules(),
             RepaymentRequest::staticMessages());
         if ($validator->fails()) {
-            return response()->json([
-                "status" => "error",
-                "errors" => $validator->errors(),
-            ], 400);
+            $bag = [
+                'message' => 'Validate error',
+                'errors' => $validator->errors(),
+            ];
+            return null;
         }
         $repayment = new Repayment();
-        $repayment->setProps([
-            Repayment::AMOUNT => $request->get(Repayment::AMOUNT),
-        ]);
+        $repayment->setProps($bag);
         if ($repayment->save()) {
-            return response()->json([
-                "status" => "success",
-            ], 200);
+            return $repayment;
         }
-        return response()->json([
-            "status" => "error",
-            "error" => trans('default.save_repayment_fail'),
-        ], 500);
+        $bag = [
+            'message' => 'Saving fail',
+        ];
+        return null;
     }
 
     /**
@@ -54,8 +51,10 @@ class RepaymentController extends Controller
         if ($repayment) {
             return new RepaymentResource($repayment);
         }
-        return new RepaymentCollection(Repayment::filterRepayment([
-            'perPage' => $request->get('perPage') ?? 10,
-        ]));
+        $loan = Loan::find($request->get('loanId'));
+        if (!$loan) {
+            return response()->json(['message' => 'Loan not found'], 404);
+        }
+        return new RepaymentCollection($loan->repayments);
     }
 }
