@@ -14,12 +14,8 @@ class UserCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        $users = $this->resource;
-        $usersArray = [];
-        foreach ($users as $user) {
-            $array = $user->toArray();
-            $usersArray[] = $array;
-        }
-        return $usersArray;
+        return $this->resource->map(function ($user) {
+            return (new UserResource($user))->toArray($request);
+        });
     }
 }

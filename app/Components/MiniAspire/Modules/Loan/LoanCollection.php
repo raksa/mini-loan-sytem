@@ -14,12 +14,8 @@ class LoanCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        $loans = $this->resource;
-        $loansArray = [];
-        foreach ($loans as $loan) {
-            $array = $loan->toArray();
-            $loansArray[] = $array;
-        }
-        return $loansArray;
+        return $this->resource->map(function ($loan) {
+            return (new LoanResource($loan))->toArray($request);
+        });
     }
 }

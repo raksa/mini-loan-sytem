@@ -2,6 +2,7 @@
 
 namespace App\Components\MiniAspire\Modules\User;
 
+use App\Components\MiniAspire\Modules\Loan\LoanCollection;
 use Illuminate\Http\Resources\Json\Resource;
 
 class UserResource extends Resource
@@ -16,6 +17,7 @@ class UserResource extends Resource
     {
         $user = $this->resource;
         $array = $user->toArray();
+        $array['loans'] = (new LoanCollection($user->loans))->toArray($request);
         return $array;
     }
 }
