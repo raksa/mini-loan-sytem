@@ -38,6 +38,22 @@ class Repayment extends Model
     {
         return $this->{self::AMOUNT};
     }
+    public function getPaymentStatusId()
+    {
+        return $this->{self::PAYMENT_STATUS};
+    }
+    public function getDueDate()
+    {
+        return new Carbon($this->{self::DUE_DATE}) . '';
+    }
+    public function getDateOfPayment()
+    {
+        return new Carbon($this->{self::DATE_OF_PAYMENT}) . '';
+    }
+    public function getRemarks()
+    {
+        return $this->{self::REMARKS};
+    }
     public function getLastUpdatedTime()
     {
         return new Carbon($this->{self::LAST_UPDATED}) . '';

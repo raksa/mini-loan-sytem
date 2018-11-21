@@ -1,8 +1,8 @@
 <?php
 namespace App\Components\MiniAspire\Modules\Loan;
 
-use App\Components\MiniAspire\Modules\User\User;
 use App\Components\MiniAspire\Modules\Repayment\Repayment;
+use App\Components\MiniAspire\Modules\User\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -46,6 +46,31 @@ class Loan extends Model
     {
         return $this->{self::DURATION};
     }
+    public function getRepaymentFrequencyTypeId()
+    {
+        return $this->{self::REPAYMENT_FREQUENCY};
+    }
+    public function getMonthlyInterestRate()
+    {
+        return $this->{self::INTEREST_RATE};
+    }
+    public function getArrangementFee()
+    {
+        return $this->{self::ARRANGEMENT_FEE};
+    }
+    public function getRemarks()
+    {
+        return $this->{self::REMARKS};
+    }
+    public function getDateContractStart()
+    {
+        return new Carbon($this->{self::DATE_CONTRACT_START}) . '';
+    }
+    public function getDateContractEnd()
+    {
+        return new Carbon($this->{self::DATE_CONTRACT_END}) . '';
+    }
+
     public function getLastUpdatedTime()
     {
         return new Carbon($this->{self::LAST_UPDATED}) . '';
