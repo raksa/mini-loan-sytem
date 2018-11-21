@@ -64,20 +64,20 @@ class Loan extends Model
     }
     public function getDateContractStart()
     {
-        return new Carbon($this->{self::DATE_CONTRACT_START}) . '';
+        return new Carbon($this->{self::DATE_CONTRACT_START});
     }
     public function getDateContractEnd()
     {
-        return new Carbon($this->{self::DATE_CONTRACT_END}) . '';
+        return new Carbon($this->{self::DATE_CONTRACT_END});
     }
 
     public function getLastUpdatedTime()
     {
-        return new Carbon($this->{self::LAST_UPDATED}) . '';
+        return new Carbon($this->{self::LAST_UPDATED});
     }
     public function getCreatedTime()
     {
-        return new Carbon($this->{self::CREATED}) . '';
+        return new Carbon($this->{self::CREATED});
     }
 
     public function setProps($data)
@@ -90,7 +90,8 @@ class Loan extends Model
         $this->{self::ARRANGEMENT_FEE} = $data[self::ARRANGEMENT_FEE];
         $this->{self::REMARKS} = $data[self::REMARKS];
         $this->{self::DATE_CONTRACT_START} = $data[self::DATE_CONTRACT_START];
-        $this->{self::DATE_CONTRACT_END} = $data[self::DATE_CONTRACT_END];
+        $endDate = $this->getDateContractStart()->copy()->addMonth($this->getMonthsDuration());
+        $this->{self::DATE_CONTRACT_END} = $endDate;
     }
 
     /**

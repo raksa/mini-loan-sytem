@@ -22,6 +22,7 @@ class LoanRequest extends FormRequest
 
     public static function staticRules()
     {
+        // TODO: update validation rules
         return [
             Loan::AMOUNT => 'required|numeric',
         ];

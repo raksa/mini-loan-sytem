@@ -2,8 +2,10 @@
 
 namespace App\Components\MiniAspire\Modules\Loan;
 
+use App\Components\MiniAspire\Modules\Repayment\RepaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 /*
@@ -26,18 +28,20 @@ class LoanController extends Controller
                 "errors" => $validator->errors(),
             ], 400);
         }
+        DB::beginTransaction();
         $loan = new Loan();
-        $loan->setProps([
-            Loan::AMOUNT => $request->get(Loan::AMOUNT),
-        ]);
-        if ($loan->save()) {
+        $loan->setProps($request->all());
+        if ($loan->save() && RepaymentController::generateRepayments($bag, $loan)) {
+            DB::commit();
             return response()->json([
                 "status" => "success",
+                "loan" => new LoanResource($loan),
             ], 200);
         }
+        DB::rollBack();
         return response()->json([
             "status" => "error",
-            "error" => trans('default.save_loan_fail'),
+            "message" => trans('default.saving_fail'),
         ], 500);
     }
 

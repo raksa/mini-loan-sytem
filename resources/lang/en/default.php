@@ -1,5 +1,5 @@
 <?php
-
+// TODO: translate all
 return [
     "not_allow_api" => "Unauthorized can't be allowed.",
     "loan_amount_required" => "Loan amount can't be empty",

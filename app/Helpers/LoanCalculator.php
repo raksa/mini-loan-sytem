@@ -8,32 +8,63 @@ namespace App\Helpers;
 class LoanCalculator
 {
     /**
-     * Calculate monthly for monthly replayment
-     * @param &$bag
+     * Calculate amount for monthly repayment
      * @param $typeId
      * @param float $loanAmount
      * @param float $monthlyInterestRate
      * @param float $repaymentMonthNumber
      */
     public static function calculateMonthlyRepayment(
-        &$bag, $typeId,
         float $loanAmount,
         float $monthlyInterestRate,
         float $repaymentMonthNumber
     ) {
-        $bag = [];
-        if (LoanType::isStandard($typeId)) {
+        // Base simple explain
+        // with the most typical formula https://en.wikipedia.org/wiki/Loan
+        $realMonthlyInterestRate = $monthlyInterestRate / 100;
+        $result = $loanAmount * $realMonthlyInterestRate * \pow(1 + $realMonthlyInterestRate, $repaymentMonthNumber);
+        $result = $result / (\pow(1 + $realMonthlyInterestRate, $repaymentMonthNumber) - 1);
 
-            // Base simple explain
-            // with the most typical formula https://en.wikipedia.org/wiki/Loan
-            $realMonthlyInterestRate = $monthlyInterestRate / 100;
-            $result = $loanAmount * $realMonthlyInterestRate * \pow(1 + $realMonthlyInterestRate, $repaymentMonthNumber);
-            $result = $result / (\pow(1 + $realMonthlyInterestRate, $repaymentMonthNumber) - 1);
+        return $result;
+    }
+    /**
+     * Calculate amount for fortnightly repayment
+     * @param $typeId
+     * @param float $loanAmount
+     * @param float $monthlyInterestRate
+     * @param float $repaymentMonthNumber
+     */
+    public static function calculateFortnightlyRepayment(
+        float $loanAmount,
+        float $monthlyInterestRate,
+        float $repaymentMonthNumber
+    ) {
+        // FIXME: make correct formula
+        $realMonthlyInterestRate = $monthlyInterestRate / 100;
+        $repaymentFortnightNumber = $repaymentMonthNumber * 2;
+        $result = $loanAmount * $realMonthlyInterestRate * \pow(1 + $realMonthlyInterestRate, $repaymentFortnightNumber);
+        $result = $result / (\pow(1 + $realMonthlyInterestRate, $repaymentFortnightNumber) - 1);
 
-            $bag['message'] = LoanType::STANDARD['description'];
-            return $result;
-        }
-        $bag['message'] = 'Unknown loan type';
-        return null;
+        return $result;
+    }
+    /**
+     * Calculate amount for weekly repayment
+     * @param $typeId
+     * @param float $loanAmount
+     * @param float $monthlyInterestRate
+     * @param float $repaymentMonthNumber
+     */
+    public static function calculateWeeklyRepayment(
+        float $loanAmount,
+        float $monthlyInterestRate,
+        float $repaymentMonthNumber
+    ) {
+        // FIXME: make correct formula
+        $realMonthlyInterestRate = $monthlyInterestRate / 100;
+        $repaymentWeekNumber = $repaymentMonthNumber * 4;
+        $result = $loanAmount * $realMonthlyInterestRate * \pow(1 + $realMonthlyInterestRate, $repaymentWeekNumber);
+        $result = $result / (\pow(1 + $realMonthlyInterestRate, $repaymentWeekNumber) - 1);
+
+        return $result;
     }
 }

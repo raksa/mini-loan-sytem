@@ -22,6 +22,7 @@ class RepaymentRequest extends FormRequest
 
     public static function staticRules()
     {
+        // TODO: update validation rules
         return [
             Repayment::AMOUNT => 'required|numeric',
         ];

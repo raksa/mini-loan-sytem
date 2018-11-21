@@ -22,6 +22,7 @@ class UserRequest extends FormRequest
 
     public static function staticRules()
     {
+        // TODO: update validation rules
         return [
             User::FIRST_NAME => 'required',
         ];

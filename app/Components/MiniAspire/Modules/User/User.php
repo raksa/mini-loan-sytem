@@ -69,11 +69,11 @@ class User extends Model
     }
     public function getLastUpdatedTime()
     {
-        return new Carbon($this->{self::LAST_UPDATED}) . '';
+        return new Carbon($this->{self::LAST_UPDATED});
     }
     public function getCreatedTime()
     {
-        return new Carbon($this->{self::CREATED}) . '';
+        return new Carbon($this->{self::CREATED});
     }
 
     public function setProps($data)
