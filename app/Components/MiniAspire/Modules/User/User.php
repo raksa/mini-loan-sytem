@@ -14,6 +14,7 @@ class User extends Model
     const TABLE_NAME = 'users';
 
     const ID = 'id';
+    const USER_CODE = 'user_code'; //special string to make unique identify user
     const FIRST_NAME = 'first_name';
     const LAST_NAME = 'last_name';
     const PHONE_NUMBER = 'phone_number';
@@ -31,6 +32,24 @@ class User extends Model
     public function getId()
     {
         return $this->{self::ID};
+    }
+    public function getUserCode()
+    {
+        return $this->{self::USER_CODE};
+    }
+    public static function generateUserCode()
+    {
+        $latestUserRecord = self::orderBy(self::ID, 'desc')->first();
+        if (!$latestUserRecord) {
+            return 'a000000';
+        }
+        $userCode = $latestUserRecord->getUserCode();
+        while (true) {
+            if (!self::where(self::USER_CODE, ++$userCode)->exist()) {
+                break;
+            }
+        }
+        return $userCode;
     }
     public function getFirstName()
     {
