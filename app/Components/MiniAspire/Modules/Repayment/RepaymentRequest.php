@@ -2,6 +2,7 @@
 
 namespace App\Components\MiniAspire\Modules\Repayment;
 
+use App\Components\MiniAspire\Modules\Loan\Loan;
 use Illuminate\Foundation\Http\FormRequest;
 
 /*
@@ -22,8 +23,11 @@ class RepaymentRequest extends FormRequest
 
     public static function staticRules()
     {
-        // FIXME: update validation rules
         return [
+            Repayment::LOAN_ID => 'required|exists:' . Loan::TABLE_NAME . ',' . Loan::ID,
+            Repayment::AMOUNT => 'required|numeric',
+            Repayment::PAYMENT_STATUS => 'required|numeric',
+            Repayment::DUE_DATE => 'required',
         ];
     }
 
@@ -39,6 +43,13 @@ class RepaymentRequest extends FormRequest
     public static function staticMessages()
     {
         return [
+            Repayment::LOAN_ID . '.required' => trans('default.repayment_loan_id_required'),
+            Repayment::LOAN_ID . '.exists' => trans('default.repayment_loan_not_found'),
+            Repayment::AMOUNT . '.required' => trans('default.repayment_amount_required'),
+            Repayment::AMOUNT . '.numeric' => trans('default.repayment_amount_must_numeric'),
+            Repayment::PAYMENT_STATUS . '.required' => trans('default.repayment_status_id_required'),
+            Repayment::PAYMENT_STATUS . '.numeric' => trans('default.repayment_status_id_must_numeric'),
+            Repayment::DUE_DATE . '.required' => trans('default.repayment_due_date_required'),
         ];
     }
 }

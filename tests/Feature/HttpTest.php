@@ -60,7 +60,7 @@ class HttpTest extends TestCase
 
             // Assert fail status of try to duplicate field value
             $response = $this->post('/api/v1/users/create', $user->toArray());
-            $response->assertStatus(500);
+            $response->assertStatus(400);
 
             // Test post to get loans of user
             $response = $this->post('/api/v1/loans/get/' . $user->getId());

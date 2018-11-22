@@ -54,7 +54,7 @@ class RepaymentController extends Controller
                 Repayment::LOAN_ID => $loan->getId(),
                 Repayment::AMOUNT => $amount,
                 Repayment::PAYMENT_STATUS => RepaymentStatus::UNPAID["id"],
-                Repayment::DUE_DATE => $dueDate,
+                Repayment::DUE_DATE => $dueDate . '',
                 Repayment::DATE_OF_PAYMENT => null,
                 Repayment::REMARKS => null,
             ])) {

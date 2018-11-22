@@ -17,13 +17,17 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        return static::staticRules();
+        $id = request()->get('user');
+        return static::staticRules($id);
     }
 
-    public static function staticRules()
+    public static function staticRules($id = null)
     {
-        // FIXME: update validation rules
         return [
+            User::FIRST_NAME => 'required|max:50',
+            User::LAST_NAME => 'required|max:50',
+            User::PHONE_NUMBER => 'required|unique:' .
+            User::TABLE_NAME . ',' . User::PHONE_NUMBER . ',' . $id . ',' . User::ID,
         ];
     }
 
@@ -39,6 +43,12 @@ class UserRequest extends FormRequest
     public static function staticMessages()
     {
         return [
+            User::FIRST_NAME . '.required' => trans('default.user_first_name_required'),
+            User::FIRST_NAME . '.max' => trans('default.user_first_name_max'),
+            User::LAST_NAME . '.required' => trans('default.user_last_name_required'),
+            User::LAST_NAME . '.max' => trans('default.user_last_name_max'),
+            User::PHONE_NUMBER . '.required' => trans('default.user_phone_required'),
+            User::PHONE_NUMBER . '.unique' => trans('default.user_phone_unique'),
         ];
     }
 }
