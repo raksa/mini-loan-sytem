@@ -69,10 +69,12 @@ class AuthenticateAPIOnce
         $encrypted = \base64_encode($cryptedString);
         return $encrypted;
     }
-    public static function dataToTokenHash($data = [], $salt)
+    public static function dataToTokenHash($data = [], $salt, $timestamp = null)
     {
         $text = static::dataToString($data);
-        $timestamp = Carbon::now()->getTimestamp();
+        if (!$timestamp) {
+            $timestamp = Carbon::now()->getTimestamp();
+        }
         $encrypted = static::genTokenHash($text . $timestamp, $salt);
         return $encrypted;
     }

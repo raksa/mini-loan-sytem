@@ -1,20 +1,32 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
 use App\Components\MiniAspire\Modules\Loan\Loan;
 use App\Components\MiniAspire\Modules\Repayment\RepaymentFrequency;
 use App\Components\MiniAspire\Modules\User\User;
 use Carbon\Carbon;
+use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Foundation\Testing\TestCase;
 use Illuminate\Support\Facades\DB;
-use Tests\TestCase;
 
 class HttpTest extends TestCase
 {
     /**
+     * Creates the application.
+     *
+     * @return \Illuminate\Foundation\Application
+     */
+    public function createApplication()
+    {
+        $app = require __DIR__ . '/../../bootstrap/app.php';
+        $app->make(Kernel::class)->bootstrap();
+        return $app;
+    }
+    /**
      * Test post api
      */
-    public function testPostingAPI()
+    public function testBasicTest()
     {
         DB::beginTransaction();
 
@@ -35,7 +47,7 @@ class HttpTest extends TestCase
         $response = $this->post('/api/v1/users/create', [
             User::FIRST_NAME => 'test_firstname',
             User::LAST_NAME => 'test_lastname',
-            User::PHONE_NUMBER => '012345678',
+            User::PHONE_NUMBER => '85512345678',
             User::ADDRESS => '',
         ]);
         $response->assertStatus(200);

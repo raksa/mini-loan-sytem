@@ -27,7 +27,7 @@ class LoanController extends Controller
         if (!$user) {
             return response()->json([
                 "status" => "success",
-                "message" => trans('default.user_not_found'),
+                "message" => trans("default.user_not_found"),
             ], 404);
         }
         $data = $request->all();

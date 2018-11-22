@@ -115,7 +115,7 @@ class RepaymentController extends Controller
             ], 400);
         }
         $repayment->setPaymentStatusId(RepaymentStatus::PAID["id"]);
-        $repayment->setRemarks($request->get('remarks'));
+        $repayment->setRemarks($request->get("remarks"));
         try {
             if ($repayment->save()) {
                 DB::commit();
@@ -143,7 +143,7 @@ class RepaymentController extends Controller
     {
         $repayment = Repayment::find($id);
         if (!$repayment) {
-            return response()->json(['message' => trans('default.repayment_not_found')], 404);
+            return response()->json(["message" => trans("default.repayment_not_found")], 404);
         }
         return new RepaymentResource($repayment);
     }
