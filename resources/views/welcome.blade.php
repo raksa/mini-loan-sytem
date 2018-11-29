@@ -73,6 +73,7 @@
                 <div class="links">
                     <a href="/">Home</a>
                     <a href="/telescope">Telescope</a>
+                    <a href="/horizon">Horizon</a>
                 </div>
             </div>
         </div>
