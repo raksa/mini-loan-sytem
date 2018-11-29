@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\CallCommandQueue;
 use App\Jobs\ProcessNumber;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
@@ -46,22 +45,16 @@ class TestQueue extends Command
         for ($i = 0; $i < 10; $i++) {
             ProcessNumber::dispatch($i)->onQueue($queueNumber);
         }
-        // call queue work in background
-        $queueCommand = 'command';
-        CallCommandQueue::dispatch([
-            'queue:work',
+        $this->info('Jobs have been dispatch');
+        $this->info('Jobs will be proceed in next 2 seconds');
+
+        sleep(2); //delay to wait until database storing done
+        $this->info('Jobs are processing...');
+        Artisan::call('queue:work',
             [
                 'database',
                 '--queue' => $queueNumber,
                 '--stop-when-empty' => true,
-            ]])->delay(now()->addSecond(1))->onQueue($queueCommand);
-
-        Artisan::call('queue:work', [
-            'database',
-            '--queue' => $queueCommand,
-            '--once' => true,
-        ]);
-
-        $this->info('Jobs have been dispatch');
+            ]);
     }
 }
