@@ -42,10 +42,11 @@ class RepaymentController extends Controller
         while (true) {
             if (RepaymentFrequency::isMonthly($frequencyType)) {
                 $dueDate = $dueDate->copy()->addMonth(1);
+                $dueDate->day = $endDate->day;
             } else if (RepaymentFrequency::isFortnightly($frequencyType)) {
-                $dueDate = $dueDate->copy()->addWeek(2);
+                $dueDate = $dueDate->copy()->addDay(14);
             } else {
-                $dueDate = $dueDate->copy()->addWeek(1);
+                $dueDate = $dueDate->copy()->addDay(7);
             }
             if ($dueDate->greaterThan($endDate)) {
                 break;
