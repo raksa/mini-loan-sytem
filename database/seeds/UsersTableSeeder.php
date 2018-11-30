@@ -15,7 +15,7 @@ class UsersTableSeeder extends Seeder
         $user->fill([
             'name' => 'raksa',
             'email' => 'eng.raksa@gmail.com',
-            'password' => '123456',
+            'password' => bcrypt('123456'),
         ]);
         $user->email_verified_at = now();
         $user->save();
