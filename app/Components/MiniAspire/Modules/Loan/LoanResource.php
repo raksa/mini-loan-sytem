@@ -3,7 +3,7 @@
 namespace App\Components\MiniAspire\Modules\Loan;
 
 use App\Components\MiniAspire\Modules\Repayment\RepaymentCollection;
-use App\Components\MiniAspire\Modules\User\UserResource;
+use App\Components\MiniAspire\Modules\Client\ClientResource;
 use Illuminate\Http\Resources\Json\Resource;
 
 class LoanResource extends Resource

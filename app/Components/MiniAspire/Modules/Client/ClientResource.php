@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Components\MiniAspire\Modules\User;
+namespace App\Components\MiniAspire\Modules\Client;
 
 use App\Components\MiniAspire\Modules\Loan\LoanCollection;
 use Illuminate\Http\Resources\Json\Resource;
 
-class UserResource extends Resource
+class ClientResource extends Resource
 {
     /**
      * Transform the resource into an array.
@@ -15,9 +15,9 @@ class UserResource extends Resource
      */
     public function toArray($request)
     {
-        $user = $this->resource;
-        $array = $user->toArray();
-        $array['loans'] = (new LoanCollection($user->loans))->toArray($request);
+        $client = $this->resource;
+        $array = $client->toArray();
+        $array['loans'] = (new LoanCollection($client->loans))->toArray($request);
         return $array;
     }
 }

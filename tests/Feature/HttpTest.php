@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Components\MiniAspire\Modules\Loan\Loan;
 use App\Components\MiniAspire\Modules\Repayment\RepaymentFrequency;
-use App\Components\MiniAspire\Modules\User\User;
+use App\Components\MiniAspire\Modules\Client\Client;
 use Carbon\Carbon;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\TestCase;
@@ -30,44 +30,44 @@ class HttpTest extends TestCase
     {
         DB::beginTransaction();
 
-        // Test post to get users in pagination
-        $response = $this->post('/api/v1/users/get');
+        // Test post to get clients in pagination
+        $response = $this->post('/api/v1/clients/get');
         $response->assertStatus(200);
 
-        // Test post to get user by user id
-        $user = User::first();
-        if ($user) {
-            $response = $this->post('/api/v1/users/get/' . $user->getId());
+        // Test post to get client by client id
+        $client = Client::first();
+        if ($client) {
+            $response = $this->post('/api/v1/clients/get/' . $client->getId());
             $response->assertStatus(200);
         } else {
-            $this->assertNull($user);
+            $this->assertNull($client);
         }
 
-        // Test post to create user
-        $response = $this->post('/api/v1/users/create', [
-            User::FIRST_NAME => 'test_firstname',
-            User::LAST_NAME => 'test_lastname',
-            User::PHONE_NUMBER => '85512345678',
-            User::ADDRESS => '',
+        // Test post to create client
+        $response = $this->post('/api/v1/clients/create', [
+            Client::FIRST_NAME => 'test_firstname',
+            Client::LAST_NAME => 'test_lastname',
+            Client::PHONE_NUMBER => '85512345678',
+            Client::ADDRESS => '',
         ]);
         $response->assertStatus(200);
         if ($response->baseResponse->getStatusCode() == 200) {
 
-            // Assert user exists
-            $userId = $response->baseResponse->getData(true)['user']['id'];
-            $user = User::find($userId);
-            $this->assertNotNull($user);
+            // Assert client exists
+            $clientId = $response->baseResponse->getData(true)['client']['id'];
+            $client = Client::find($clientId);
+            $this->assertNotNull($client);
 
             // Assert fail status of try to duplicate field value
-            $response = $this->post('/api/v1/users/create', $user->toArray());
+            $response = $this->post('/api/v1/clients/create', $client->toArray());
             $response->assertStatus(400);
 
-            // Test post to get loans of user
-            $response = $this->post('/api/v1/loans/get/' . $user->getId());
+            // Test post to get loans of client
+            $response = $this->post('/api/v1/loans/get/' . $client->getId());
             $response->assertStatus(200);
 
-            // Test post to get loans of user
-            $response = $this->post('/api/v1/loans/create/' . $user->getId(), [
+            // Test post to get loans of client
+            $response = $this->post('/api/v1/loans/create/' . $client->getId(), [
                 Loan::AMOUNT => 1000,
                 Loan::DURATION => 12,
                 Loan::REPAYMENT_FREQUENCY => RepaymentFrequency::MONTHLY['id'],
@@ -94,7 +94,7 @@ class HttpTest extends TestCase
                 $response->assertStatus(400);
             }
 
-            // Test post to get loans of user
+            // Test post to get loans of client
             $response = $this->post('/api/v1/loans/get_freq_type');
             $response->assertStatus(200);
             $types = RepaymentFrequency::toArrayForApi();

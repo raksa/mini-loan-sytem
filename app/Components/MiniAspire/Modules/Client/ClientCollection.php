@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Components\MiniAspire\Modules\User;
+namespace App\Components\MiniAspire\Modules\Client;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class UserCollection extends ResourceCollection
+class ClientCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -14,8 +14,8 @@ class UserCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return $this->resource->map(function ($user, $request) {
-            return (new UserResource($user))->toArray($request);
+        return $this->resource->map(function ($client, $request) {
+            return (new ClientResource($client))->toArray($request);
         });
     }
 }

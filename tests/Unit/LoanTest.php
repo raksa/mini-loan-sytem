@@ -21,8 +21,8 @@ class LoanTest extends TestCase
     public function testBasicTest()
     {
         // Fail connection to database after HttpTest released
-        // $userCode = User::generateUserCode();
-        // $this->assertTrue(!!\preg_match('/^[a-z]+[0-9]{6}$/', $userCode));
+        // $clientCode = Client::generateClientCode();
+        // $this->assertTrue(!!\preg_match('/^[a-z]+[0-9]{6}$/', $clientCode));
 
         // Assert calculation
         $amount = LoanCalculator::calculateMonthlyRepayment(1000, 0.1, 12);

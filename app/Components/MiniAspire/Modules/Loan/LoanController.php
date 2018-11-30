@@ -4,7 +4,7 @@ namespace App\Components\MiniAspire\Modules\Loan;
 
 use App\Components\MiniAspire\Modules\Repayment\RepaymentController;
 use App\Components\MiniAspire\Modules\Repayment\RepaymentFrequency;
-use App\Components\MiniAspire\Modules\User\User;
+use App\Components\MiniAspire\Modules\Client\Client;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -19,15 +19,15 @@ class LoanController extends Controller
      * Create loan via api
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Components\MiniAspire\Modules\User\User:ID $id
+     * @param \App\Components\MiniAspire\Modules\Client\Client:ID $id
      */
     public function apiCreateLoan(Request $request, $id)
     {
-        $user = User::find($id);
-        if (!$user) {
+        $client = Client::find($id);
+        if (!$client) {
             return response()->json([
                 "status" => "success",
-                "message" => trans("default.user_not_found"),
+                "message" => trans("default.client_not_found"),
             ], 404);
         }
         $data = $request->all();
@@ -42,7 +42,7 @@ class LoanController extends Controller
         }
         DB::beginTransaction();
         $loan = new Loan();
-        $data[Loan::USER_ID] = $id;
+        $data[Loan::CLIENT_ID] = $id;
         $loan->setProps($data);
         if ($loan->save() && RepaymentController::generateRepayments($bag, $loan)) {
             DB::commit();
@@ -63,7 +63,7 @@ class LoanController extends Controller
      * Get loan if loan"s id is specified
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Components\MiniAspire\Modules\User\User:ID $id
+     * @param \App\Components\MiniAspire\Modules\Client\Client:ID $id
      */
     public function apiGetLoan(Request $request, $id)
     {

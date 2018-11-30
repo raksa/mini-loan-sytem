@@ -2,7 +2,7 @@
 
 namespace App\Components\MiniAspire\Modules\Repayment;
 
-use App\Components\MiniAspire\Modules\User\UserResource;
+use App\Components\MiniAspire\Modules\Client\ClientResource;
 use Illuminate\Http\Resources\Json\Resource;
 
 class RepaymentResource extends Resource
@@ -17,7 +17,7 @@ class RepaymentResource extends Resource
     {
         $repayment = $this->resource;
         $array = $repayment->toArray();
-        $array['user_id'] = $repayment->loan->user->getId();
+        $array['client_id'] = $repayment->loan->client->getId();
         return $array;
     }
 }

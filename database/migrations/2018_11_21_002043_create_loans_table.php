@@ -1,7 +1,7 @@
 <?php
 
 use App\Components\MiniAspire\Modules\Loan\Loan;
-use App\Components\MiniAspire\Modules\User\User;
+use App\Components\MiniAspire\Modules\Client\Client;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,10 +17,10 @@ class CreateLoansTable extends Migration
     {
         Schema::create(Loan::TABLE_NAME, function (Blueprint $table) {
             $table->increments(Loan::ID);
-            $table->integer(Loan::USER_ID, false, true);
-            $table->foreign(Loan::USER_ID)
-                ->references(User::ID)
-                ->on(User::TABLE_NAME);
+            $table->integer(Loan::CLIENT_ID, false, true);
+            $table->foreign(Loan::CLIENT_ID)
+                ->references(Client::ID)
+                ->on(Client::TABLE_NAME);
             $table->double(Loan::AMOUNT, 18, 8)->unsigned();
             $table->integer(Loan::DURATION)->unsigned();
             $table->integer(Loan::REPAYMENT_FREQUENCY)->unsigned();

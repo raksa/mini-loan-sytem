@@ -2,7 +2,7 @@
 namespace App\Components\MiniAspire\Modules\Loan;
 
 use App\Components\MiniAspire\Modules\Repayment\Repayment;
-use App\Components\MiniAspire\Modules\User\User;
+use App\Components\MiniAspire\Modules\Client\Client;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,7 +15,7 @@ class Loan extends Model
     const TABLE_NAME = 'loans';
 
     const ID = 'id';
-    const USER_ID = 'user_id';
+    const CLIENT_ID = 'client_id';
     const AMOUNT = 'amount';
     const DURATION = 'duration';
     const REPAYMENT_FREQUENCY = 'repayment_frequency';
@@ -82,7 +82,7 @@ class Loan extends Model
 
     public function setProps($data)
     {
-        $this->{self::USER_ID} = $data[self::USER_ID];
+        $this->{self::CLIENT_ID} = $data[self::CLIENT_ID];
         $this->{self::AMOUNT} = $data[self::AMOUNT];
         $this->{self::DURATION} = $data[self::DURATION];
         $this->{self::REPAYMENT_FREQUENCY} = $data[self::REPAYMENT_FREQUENCY];
@@ -105,13 +105,13 @@ class Loan extends Model
     }
 
     /**
-     * Association many to one, many loans can have same one user.
+     * Association many to one, many loans can have same one client.
      */
-    public function user()
+    public function client()
     {
-        return $this->hasOne(User::class,
-            User::ID,
-            self::USER_ID);
+        return $this->hasOne(Client::class,
+            Client::ID,
+            self::CLIENT_ID);
     }
 
     /**
