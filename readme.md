@@ -1,8 +1,21 @@
-## Loan System
+# Loan System
+
+## Features
+
+* Laravel 5.7
+* Separate modules
+* API
+* Hash base authentication once
+* Unit test
+* Laravel horizon
+* Laravel passport
+* Laravel telescope
+* Laravel custom artisan command
+* Laravel queue jobs
 
 ## Contributors
 
-* raksa <eng.raksa@gmail.com>
+* Autor : raksa <eng.raksa@gmail.com>
 
 ## Install Dependencies for Development
 * `$ composer install`
@@ -21,3 +34,7 @@ this can be run every updating code time
 ## Configuration
 
 All required environment variables can be found in .env.example
+
+## License
+
+MIT
