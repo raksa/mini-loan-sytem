@@ -5,6 +5,7 @@ use App\Components\MiniAspire\Modules\Loan\Loan;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
+// TODO: use all eloquent features
 /*
  * Author: Raksa Eng
  */

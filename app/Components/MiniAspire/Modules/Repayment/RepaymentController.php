@@ -9,6 +9,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Validator;
 
+// TODO: make repository
 // TODO: comment some complexity parts
 /*
  * Author: Raksa Eng

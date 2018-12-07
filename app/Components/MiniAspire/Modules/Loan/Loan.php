@@ -6,6 +6,7 @@ use App\Components\MiniAspire\Modules\Client\Client;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
+// TODO: use all eloquent features
 /*
  * Author: Raksa Eng
  */
