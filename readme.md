@@ -31,6 +31,9 @@ attention: this will remove everything in database
 this can be run every updating code time
 * `$ php artisan migrate`
 
+## Run test cases
+* `$ composer run test`
+
 ## Configuration
 
 All required environment variables can be found in .env.example
