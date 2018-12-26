@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Components\MiniAspire\Modules\Loan\Loan;
-use App\Components\MiniAspire\Modules\Repayment\RepaymentFrequency;
-use App\Components\MiniAspire\Modules\Client\Client;
+use App\Components\CoreComponent\Modules\Loan\Loan;
+use App\Components\CoreComponent\Modules\Repayment\RepaymentFrequency;
+use App\Components\CoreComponent\Modules\Client\Client;
 use Carbon\Carbon;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\TestCase;

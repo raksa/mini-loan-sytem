@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\MiniAspire\Modules\Repayment;
+namespace App\Components\CoreComponent\Modules\Repayment;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Components\MiniAspire\Modules\Repayment;
+namespace App\Components\CoreComponent\Modules\Repayment;
 
-use App\Components\MiniAspire\Modules\Loan\Loan;
+use App\Components\CoreComponent\Modules\Loan\Loan;
 use App\Helpers\LoanCalculator;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -96,7 +96,7 @@ class RepaymentController extends Controller
      * Pay for repayment
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Components\MiniAspire\Modules\Repayment\Repayment::ID $id
+     * @param \App\Components\CoreComponent\Modules\Repayment\Repayment::ID $id
      */
     public function apiPay(Request $request, $id)
     {
@@ -139,7 +139,7 @@ class RepaymentController extends Controller
      * Get repayment if repayment"s id is specified
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Components\MiniAspire\Modules\Repayment\Repayment::ID $id
+     * @param \App\Components\CoreComponent\Modules\Repayment\Repayment::ID $id
      */
     public function apiGetRepayment(Request $request, $id)
     {

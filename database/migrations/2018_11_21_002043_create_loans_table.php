@@ -1,7 +1,7 @@
 <?php
 
-use App\Components\MiniAspire\Modules\Loan\Loan;
-use App\Components\MiniAspire\Modules\Client\Client;
+use App\Components\CoreComponent\Modules\Loan\Loan;
+use App\Components\CoreComponent\Modules\Client\Client;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

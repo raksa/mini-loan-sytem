@@ -81,7 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    MiniAspire
+                    Mini Loan
                 </div>
 
                 <div class="links">

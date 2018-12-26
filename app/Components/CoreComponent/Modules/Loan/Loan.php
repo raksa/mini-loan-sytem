@@ -1,8 +1,8 @@
 <?php
-namespace App\Components\MiniAspire\Modules\Loan;
+namespace App\Components\CoreComponent\Modules\Loan;
 
-use App\Components\MiniAspire\Modules\Repayment\Repayment;
-use App\Components\MiniAspire\Modules\Client\Client;
+use App\Components\CoreComponent\Modules\Repayment\Repayment;
+use App\Components\CoreComponent\Modules\Client\Client;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Components\MiniAspire\Modules\Repayment;
+namespace App\Components\CoreComponent\Modules\Repayment;
 
-use App\Components\MiniAspire\Modules\Loan\Loan;
+use App\Components\CoreComponent\Modules\Loan\Loan;
 use Illuminate\Foundation\Http\FormRequest;
 
 /*

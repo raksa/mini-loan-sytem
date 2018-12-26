@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Components\MiniAspire\Modules\Loan;
+namespace App\Components\CoreComponent\Modules\Loan;
 
-use App\Components\MiniAspire\Modules\Repayment\RepaymentCollection;
-use App\Components\MiniAspire\Modules\Client\ClientResource;
+use App\Components\CoreComponent\Modules\Repayment\RepaymentCollection;
+use App\Components\CoreComponent\Modules\Client\ClientResource;
 use Illuminate\Http\Resources\Json\Resource;
 
 class LoanResource extends Resource

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\MiniAspire\Modules\Client;
+namespace App\Components\CoreComponent\Modules\Client;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 

@@ -4,7 +4,7 @@
  */
 
 Route::group(['middleware' => ['auth:api'], 'prefix' => 'v1'], function () {
-    $controller = "\App\Components\MiniAspire\Modules\Client\ClientController";
+    $controller = "\App\Components\CoreComponent\Modules\Client\ClientController";
     Route::post('/clients/create', $controller . '@apiCreateClient')->name('api.clients.create');
     Route::post('/clients/get/{id?}', $controller . '@apiGetClient')->name('api.clients.get');
 });

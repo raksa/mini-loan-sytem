@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\MiniAspire\Modules\Client;
+namespace App\Components\CoreComponent\Modules\Client;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -48,7 +48,7 @@ class ClientController extends Controller
      * Get client if client"s id is specified
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Components\MiniAspire\Modules\Client\Client::ID $id
+     * @param \App\Components\CoreComponent\Modules\Client\Client::ID $id
      */
     public function apiGetClient(Request $request, $id = null)
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\MiniAspire\Modules\Loan;
+namespace App\Components\CoreComponent\Modules\Loan;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 

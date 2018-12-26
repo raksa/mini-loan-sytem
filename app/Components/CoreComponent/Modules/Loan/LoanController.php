@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Components\MiniAspire\Modules\Loan;
+namespace App\Components\CoreComponent\Modules\Loan;
 
-use App\Components\MiniAspire\Modules\Repayment\RepaymentController;
-use App\Components\MiniAspire\Modules\Repayment\RepaymentFrequency;
-use App\Components\MiniAspire\Modules\Client\Client;
+use App\Components\CoreComponent\Modules\Repayment\RepaymentController;
+use App\Components\CoreComponent\Modules\Repayment\RepaymentFrequency;
+use App\Components\CoreComponent\Modules\Client\Client;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -21,7 +21,7 @@ class LoanController extends Controller
      * Create loan via api
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Components\MiniAspire\Modules\Client\Client:ID $id
+     * @param \App\Components\CoreComponent\Modules\Client\Client:ID $id
      */
     public function apiCreateLoan(Request $request, $id)
     {
@@ -65,7 +65,7 @@ class LoanController extends Controller
      * Get loan if loan"s id is specified
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Components\MiniAspire\Modules\Client\Client:ID $id
+     * @param \App\Components\CoreComponent\Modules\Client\Client:ID $id
      */
     public function apiGetLoan(Request $request, $id)
     {

@@ -1,5 +1,5 @@
 <?php
-namespace App\Components\MiniAspire\Modules\Repayment;
+namespace App\Components\CoreComponent\Modules\Repayment;
 
 /*
  * Author: Raksa Eng

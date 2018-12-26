@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Components\MiniAspire\Modules\Repayment;
+namespace App\Components\CoreComponent\Modules\Repayment;
 
-use App\Components\MiniAspire\Modules\Client\ClientResource;
+use App\Components\CoreComponent\Modules\Client\ClientResource;
 use Illuminate\Http\Resources\Json\Resource;
 
 class RepaymentResource extends Resource
