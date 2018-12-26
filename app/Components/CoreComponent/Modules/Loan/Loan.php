@@ -91,7 +91,7 @@ class Loan extends Model
         $this->{self::ARRANGEMENT_FEE} = $data[self::ARRANGEMENT_FEE];
         $this->{self::REMARKS} = $data[self::REMARKS];
         $this->{self::DATE_CONTRACT_START} = new Carbon($data[self::DATE_CONTRACT_START]);
-        $endDate = $this->getDateContractStart()->copy()->addMonth($this->getMonthsDuration() + 1);
+        $endDate = $this->getDateContractStart()->copy()->addMonth($this->getMonthsDuration());
         $this->{self::DATE_CONTRACT_END} = $endDate;
     }
 

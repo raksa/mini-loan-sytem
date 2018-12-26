@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Components\CoreComponent\Modules\Client\Client;
 use App\Components\CoreComponent\Modules\Loan\Loan;
 use App\Components\CoreComponent\Modules\Repayment\RepaymentFrequency;
-use App\Components\CoreComponent\Modules\Client\Client;
 use Carbon\Carbon;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\TestCase;
@@ -82,7 +82,8 @@ class HttpTest extends TestCase
             $this->assertNotNull($loan);
 
             // Assert repayments
-            $this->assertTrue($loan->getMonthsDuration() == \count($loan->repayments));
+            $repayments = $loan->repayments;
+            $this->assertTrue($loan->getMonthsDuration() == $repayments->count());
 
             // Assert repay
             foreach ($loan->repayments as $repayment) {
