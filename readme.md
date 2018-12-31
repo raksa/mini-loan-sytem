@@ -1,5 +1,9 @@
 # Loan System
 
+Mini Loan system pratice in Laravel
+
+https://en.wikipedia.org/wiki/Loan
+
 ## Features
 
 * Laravel 5.7
