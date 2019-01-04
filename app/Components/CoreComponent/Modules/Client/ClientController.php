@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Validator;
 
-// TODO: comment some complexity parts
 /*
  * Author: Raksa Eng
  */

@@ -50,6 +50,7 @@ class LoanController extends Controller
         }
         DB::beginTransaction();
         $loan = $this->repository->createLoan($client, $data);
+        // use repayment repository to generate repayment base on loan
         $repaymentRepository = new RepaymentRepository();
         if ($loan && $repaymentRepository->generateRepayments($bag, $loan)) {
             DB::commit();

@@ -47,6 +47,8 @@ class RepaymentRepository
      */
     public function generateRepayments(&$bag, Loan $loan)
     {
+        // TODO: ensure repayment already generate
+
         $frequencyType = $loan->getRepaymentFrequencyTypeId();
         $monthDuration = $loan->getMonthsDuration();
         $calData = [
