@@ -16,6 +16,7 @@ https://en.wikipedia.org/wiki/Loan
 * Laravel telescope
 * Laravel custom artisan command
 * Laravel queue jobs
+* Custom artisan command
 
 ## Contributors
 
@@ -37,6 +38,9 @@ this can be run every updating code time
 
 ## Run test cases
 * `$ composer run test`
+
+## Update project via loan:update
+* `$ php artisan loan:update`
 
 ## Configuration
 
