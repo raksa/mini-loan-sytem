@@ -38,20 +38,6 @@ class Client extends Model
     {
         return $this->{self::CLIENT_CODE};
     }
-    public static function generateClientCode()
-    {
-        $latestClientRecord = self::orderBy(self::ID, 'desc')->first();
-        if (!$latestClientRecord) {
-            return 'a000000';
-        }
-        $clientCode = $latestClientRecord->getClientCode();
-        while (true) {
-            if (!self::where(self::CLIENT_CODE, ++$clientCode)->exists()) {
-                break;
-            }
-        }
-        return $clientCode;
-    }
     public function getFirstName()
     {
         return $this->{self::FIRST_NAME};
@@ -83,7 +69,7 @@ class Client extends Model
         $this->{self::LAST_NAME} = $data[self::LAST_NAME];
         $this->{self::PHONE_NUMBER} = $data[self::PHONE_NUMBER];
         isset($data[self::ADDRESS]) && ($this->{self::ADDRESS} = $data[self::ADDRESS]);
-        $this->{self::CLIENT_CODE} = static::generateClientCode();
+        $this->{self::CLIENT_CODE} = $data[self::CLIENT_CODE];
     }
 
     /**
@@ -94,16 +80,6 @@ class Client extends Model
         return $this->hasMany(Loan::class,
             Loan::CLIENT_ID,
             self::ID);
-    }
-
-    /**
-     * Filter client as pagination
-     */
-    public static function filterClient($data = [])
-    {
-        $result = self::orderBy(self::ID, 'desc');
-        $clients = $result->paginate($data['perPage']);
-        return $clients;
     }
 
     /**

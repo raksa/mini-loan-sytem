@@ -6,13 +6,18 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Validator;
 
-// TODO: make repository
 // TODO: comment some complexity parts
 /*
  * Author: Raksa Eng
  */
 class ClientController extends Controller
 {
+    private $repository;
+
+    public function __construct(ClientRepository $clientRepository)
+    {
+        $this->repository = $clientRepository;
+    }
     /**
      * Create client via api
      *
@@ -29,9 +34,8 @@ class ClientController extends Controller
                 "errors" => $validator->errors(),
             ], 400);
         }
-        $client = new Client();
-        $client->setProps($request->all());
-        if ($client->save()) {
+        $client = $this->repository->createClient($request->all());
+        if ($client) {
             return response()->json([
                 "status" => "success",
                 "client" => new ClientResource($client->refresh()),
@@ -56,7 +60,7 @@ class ClientController extends Controller
         if ($client) {
             return new ClientResource($client);
         }
-        return new ClientCollection(Client::filterClient([
+        return new ClientCollection($this->repository->filterClient([
             "perPage" => $request->get("perPage") ?? 20,
         ]));
     }
