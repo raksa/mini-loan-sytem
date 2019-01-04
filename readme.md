@@ -16,7 +16,6 @@ https://en.wikipedia.org/wiki/Loan
 * Laravel telescope
 * Laravel custom artisan command
 * Laravel queue jobs
-* Custom artisan command
 
 ## Contributors
 
