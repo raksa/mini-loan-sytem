@@ -116,16 +116,6 @@ class Loan extends Model
     }
 
     /**
-     * Filter loan as pagination
-     */
-    public static function filterLoan($data = [])
-    {
-        $result = self::orderBy(self::ID, 'desc');
-        $loans = $result->paginate($data['perPage']);
-        return $loans;
-    }
-
-    /**
      * Force delete this record
      */
     public function deleteThis()

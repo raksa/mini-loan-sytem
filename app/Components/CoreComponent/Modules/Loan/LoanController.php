@@ -2,21 +2,27 @@
 
 namespace App\Components\CoreComponent\Modules\Loan;
 
+use App\Components\CoreComponent\Modules\Client\Client;
 use App\Components\CoreComponent\Modules\Repayment\RepaymentController;
 use App\Components\CoreComponent\Modules\Repayment\RepaymentFrequency;
-use App\Components\CoreComponent\Modules\Client\Client;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Validator;
 
-// TODO: make repository
 // TODO: comment some complexity parts
 /*
  * Author: Raksa Eng
  */
 class LoanController extends Controller
 {
+    private $repository;
+
+    public function __construct(LoanRepository $loanRepository)
+    {
+        $this->repository = $loanRepository;
+    }
+
     /**
      * Create loan via api
      *
@@ -43,10 +49,8 @@ class LoanController extends Controller
             ], 400);
         }
         DB::beginTransaction();
-        $loan = new Loan();
-        $data[Loan::CLIENT_ID] = $id;
-        $loan->setProps($data);
-        if ($loan->save() && RepaymentController::generateRepayments($bag, $loan)) {
+        $loan = $this->repository->createLoan($client, $data);
+        if ($loan && RepaymentController::generateRepayments($bag, $loan)) {
             DB::commit();
             return response()->json([
                 "status" => "success",
@@ -73,7 +77,7 @@ class LoanController extends Controller
         if ($loan) {
             return new LoanResource($loan);
         }
-        return new LoanCollection(Loan::filterLoan([
+        return new LoanCollection($this->repository->filterLoan([
             "perPage" => $request->get("perPage") ?? 20,
         ]));
     }
