@@ -58,11 +58,9 @@ class UpdateProject extends Command
             // Do migration
             $this->call('migrate');
             // Clear all set
-            $this->call('optimize');
             $this->call('cache:clear');
-            $this->call('route:cache');
+            $this->call('route:clear');
             $this->call('view:clear');
-            $this->call('config:cache');
             $this->call('config:clear');
         } else {
             $this->info('Command are not confirm');
