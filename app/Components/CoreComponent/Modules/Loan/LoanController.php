@@ -3,8 +3,8 @@
 namespace App\Components\CoreComponent\Modules\Loan;
 
 use App\Components\CoreComponent\Modules\Client\Client;
-use App\Components\CoreComponent\Modules\Repayment\RepaymentController;
 use App\Components\CoreComponent\Modules\Repayment\RepaymentFrequency;
+use App\Components\CoreComponent\Modules\Repayment\RepaymentRepository;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -50,7 +50,8 @@ class LoanController extends Controller
         }
         DB::beginTransaction();
         $loan = $this->repository->createLoan($client, $data);
-        if ($loan && RepaymentController::generateRepayments($bag, $loan)) {
+        $repaymentRepository = new RepaymentRepository();
+        if ($loan && $repaymentRepository->generateRepayments($bag, $loan)) {
             DB::commit();
             return response()->json([
                 "status" => "success",
