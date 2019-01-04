@@ -55,12 +55,15 @@ class ClientController extends Controller
      */
     public function apiGetClient(Request $request, $id = null)
     {
-        $client = Client::find($id);
-        if ($client) {
-            return new ClientResource($client);
+        if (\is_null($id)) {
+            return new ClientCollection($this->repository->filterClient([
+                "perPage" => $request->get("perPage") ?? 20,
+            ]));
         }
-        return new ClientCollection($this->repository->filterClient([
-            "perPage" => $request->get("perPage") ?? 20,
-        ]));
+        $client = Client::find($id);
+        if (!$client) {
+            return response()->json(["message" => trans("default.client_not_found")], 404);
+        }
+        return new ClientResource($client);
     }
 }

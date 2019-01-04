@@ -42,6 +42,13 @@ class HttpTest extends TestCase
         } else {
             $this->assertNull($client);
         }
+        $response = $this->post('/api/v1/clients/get/' . 9999999);
+        $response->assertStatus(404);
+
+        // Test post to get clients
+        $response = $this->post('/api/v1/clients/get');
+        $response->assertStatus(200);
+        $this->assertTrue(\is_array($response->baseResponse->getData(true)['data']));
 
         // Test post to create client
         $response = $this->post('/api/v1/clients/create', [
