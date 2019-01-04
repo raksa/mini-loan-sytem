@@ -63,11 +63,16 @@ class HttpTest extends TestCase
             $response->assertStatus(400);
 
             // Test post to get loans of client
-            $response = $this->post('/api/v1/loans/get/' . $client->getId());
+            $response = $this->post('/api/v1/loans/get', [
+                'clientId' => $client->getId(),
+            ]);
             $response->assertStatus(200);
+            $loanCount = \count($response->baseResponse->getData(true)['data']);
+            $this->assertTrue($loanCount == 0);
 
             // Test post to get loans of client
-            $response = $this->post('/api/v1/loans/create/' . $client->getId(), [
+            $response = $this->post('/api/v1/loans/create', [
+                'clientId' => $client->getId(),
                 Loan::AMOUNT => 1000,
                 Loan::DURATION => 12,
                 Loan::REPAYMENT_FREQUENCY => RepaymentFrequency::MONTHLY['id'],
@@ -80,6 +85,22 @@ class HttpTest extends TestCase
             $loanId = $response->baseResponse->getData(true)['loan']['id'];
             $loan = Loan::find($loanId);
             $this->assertNotNull($loan);
+
+            // Test post to get loans of client
+            $response = $this->post('/api/v1/loans/get', [
+                'clientId' => $client->getId(),
+            ]);
+            $response->assertStatus(200);
+            $data = $response->baseResponse->getData(true)['data'];
+            $loanCount = \count($data);
+            $this->assertTrue($loanCount == 1);
+
+            // Test post to get loan
+            $requestId = $data[0]['id'];
+            $response = $this->post('/api/v1/loans/get/' . $requestId);
+            $response->assertStatus(200);
+            $responseId = $response->baseResponse->getData(true)['data']['id'];
+            $this->assertTrue($requestId == $responseId);
 
             // Assert repayments
             $repayments = $loan->repayments;

@@ -36,4 +36,6 @@ return [
     "user_last_name_max" => "User_last_name_max",
     "user_phone_required" => "User_phone_required",
     "user_phone_unique" => "User_phone_unique",
+    "loan_not_found" => "Loan not found",
+    "client_not_found" => "Client not found",
 ];

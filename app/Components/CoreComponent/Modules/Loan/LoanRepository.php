@@ -17,6 +17,10 @@ class LoanRepository
     public function filterLoan($data = [])
     {
         $result = Loan::orderBy(Loan::ID, 'desc');
+        if (isset($data["client"])) {
+            $client = $data["client"];
+            $result = $result->where(Loan::CLIENT_ID, $client->getId());
+        }
         $loans = $result->paginate($data['perPage']);
         return $loans;
     }

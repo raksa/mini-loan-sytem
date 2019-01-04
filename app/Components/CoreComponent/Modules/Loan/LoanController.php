@@ -10,7 +10,6 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Validator;
 
-// TODO: comment some complexity parts
 /*
  * Author: Raksa Eng
  */
@@ -27,18 +26,17 @@ class LoanController extends Controller
      * Create loan via api
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Components\CoreComponent\Modules\Client\Client:ID $id
      */
-    public function apiCreateLoan(Request $request, $id)
+    public function apiCreateLoan(Request $request)
     {
-        $client = Client::find($id);
+        $client = Client::find($request->get('clientId'));
         if (!$client) {
             return response()->json([
-                "status" => "success",
+                "status" => "error",
                 "message" => trans("default.client_not_found"),
             ], 404);
         }
-        $data = $request->all();
+        $data = $request->except('clientId');
         $validator = Validator::make($data, LoanRequest::staticRules(),
             LoanRequest::staticMessages());
         if ($validator->fails()) {
@@ -71,17 +69,32 @@ class LoanController extends Controller
      * Get loan if loan"s id is specified
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Components\CoreComponent\Modules\Client\Client:ID $id
+     * @param \App\Components\CoreComponent\Modules\Loan\Loan:ID $id
      */
-    public function apiGetLoan(Request $request, $id)
+    public function apiGetLoan(Request $request, $id = null)
     {
+        if (\is_null($id)) {
+            $data = [
+                "perPage" => $request->get("perPage") ?? 20,
+            ];
+            if ($request->has('clientId')) {
+                $client = Client::find($request->get('clientId'));
+                if (!$client) {
+                    return response()->json(['message' => trans("default.client_not_found")], 404);
+                } else {
+                    $data["client"] = $client;
+                }
+            }
+            return new LoanCollection($this->repository->filterLoan($data));
+        }
         $loan = Loan::find($id);
+        if (!$loan) {
+            return response()->json(['message' => trans("default.loan_not_found")], 404);
+        }
         if ($loan) {
             return new LoanResource($loan);
         }
-        return new LoanCollection($this->repository->filterLoan([
-            "perPage" => $request->get("perPage") ?? 20,
-        ]));
+
     }
 
     /**
