@@ -38,4 +38,5 @@ return [
     "user_phone_unique" => "User_phone_unique",
     "loan_not_found" => "Loan not found",
     "client_not_found" => "Client not found",
+    "repayment_exist" => "Repayment exists",
 ];

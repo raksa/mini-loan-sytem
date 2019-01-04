@@ -27,6 +27,16 @@ class RepaymentRepository
             ];
             return null;
         }
+
+        // ensure no duplicate repayment
+        if (Repayment::where(Repayment::LOAN_ID, $data[Repayment::LOAN_ID])
+            ->where(Repayment::DUE_DATE, $data[Repayment::DUE_DATE])->exists()) {
+            $bag = [
+                "message" => trans("default.repayment_exist"),
+            ];
+            return null;
+        }
+
         $repayment = new Repayment();
         $repayment->setProps($data);
         if ($repayment->save()) {
@@ -47,8 +57,6 @@ class RepaymentRepository
      */
     public function generateRepayments(&$bag, Loan $loan)
     {
-        // TODO: ensure repayment already generate
-
         $frequencyType = $loan->getRepaymentFrequencyTypeId();
         $monthDuration = $loan->getMonthsDuration();
         $calData = [

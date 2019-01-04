@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Components\CoreComponent\Modules\Client\Client;
 use App\Components\CoreComponent\Modules\Loan\Loan;
 use App\Components\CoreComponent\Modules\Repayment\RepaymentFrequency;
+use App\Components\CoreComponent\Modules\Repayment\RepaymentRepository;
 use Carbon\Carbon;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\TestCase;
@@ -92,6 +93,11 @@ class HttpTest extends TestCase
             $loanId = $response->baseResponse->getData(true)['loan']['id'];
             $loan = Loan::find($loanId);
             $this->assertNotNull($loan);
+
+            // Test duplicate generated repayment
+            $repaymentRepository = new RepaymentRepository();
+            $success = $repaymentRepository->generateRepayments($bag, $loan);
+            $this->assertFalse($success);
 
             // Test post to get loans of client
             $response = $this->post('/api/v1/loans/get', [
