@@ -49,7 +49,16 @@ class HttpTest extends TestCase
         // Test post to get clients
         $response = $this->post('/api/v1/clients/get');
         $response->assertStatus(200);
-        $this->assertTrue(\is_array($response->baseResponse->getData(true)['data']));
+        $responseData = $response->baseResponse->getData(true);
+        $this->assertTrue(\is_array($responseData['data']));
+
+        // Test post to get loans frequency repayment type
+        $response = $this->post('/api/v1/loans/get_freq_type');
+        $response->assertStatus(200);
+        $types = RepaymentFrequency::toArrayForApi();
+        $response->assertJson([
+            "types" => $types,
+        ]);
 
         // Test post to create client
         $response = $this->post('/api/v1/clients/create', [
@@ -62,7 +71,8 @@ class HttpTest extends TestCase
         if ($response->baseResponse->getStatusCode() == 200) {
 
             // Assert client exists
-            $clientId = $response->baseResponse->getData(true)['client']['id'];
+            $responseData = $response->baseResponse->getData(true);
+            $clientId = $responseData['client']['id'];
             $client = Client::find($clientId);
             $this->assertNotNull($client);
 
@@ -75,67 +85,70 @@ class HttpTest extends TestCase
                 'clientId' => $client->getId(),
             ]);
             $response->assertStatus(200);
-            $loanCount = \count($response->baseResponse->getData(true)['data']);
+            $responseData = $response->baseResponse->getData(true);
+            $loanCount = \count($responseData['data']);
             $this->assertTrue($loanCount == 0);
 
-            // Test post to get loans of client
-            $response = $this->post('/api/v1/loans/create', [
-                'clientId' => $client->getId(),
-                Loan::AMOUNT => 1000,
-                Loan::DURATION => 12,
-                Loan::REPAYMENT_FREQUENCY => RepaymentFrequency::MONTHLY['id'],
-                Loan::INTEREST_RATE => 0.1,
-                Loan::ARRANGEMENT_FEE => 100,
-                Loan::REMARKS => null,
-                Loan::DATE_CONTRACT_START => Carbon::now() . '',
-            ]);
-            $response->assertStatus(200);
-            $loanId = $response->baseResponse->getData(true)['loan']['id'];
-            $loan = Loan::find($loanId);
-            $this->assertNotNull($loan);
-
-            // Test duplicate generated repayment
-            $repaymentRepository = new RepaymentRepository();
-            $success = $repaymentRepository->generateRepayments($bag, $loan);
-            $this->assertFalse($success);
-
-            // Test post to get loans of client
-            $response = $this->post('/api/v1/loans/get', [
-                'clientId' => $client->getId(),
-            ]);
-            $response->assertStatus(200);
-            $data = $response->baseResponse->getData(true)['data'];
-            $loanCount = \count($data);
-            $this->assertTrue($loanCount == 1);
-
-            // Test post to get loan
-            $requestId = $data[0]['id'];
-            $response = $this->post('/api/v1/loans/get/' . $requestId);
-            $response->assertStatus(200);
-            $responseId = $response->baseResponse->getData(true)['data']['id'];
-            $this->assertTrue($requestId == $responseId);
-
-            // Assert repayments
-            $repayments = $loan->repayments;
-            $this->assertTrue($loan->getMonthsDuration() == $repayments->count());
-
-            // Assert repay
-            foreach ($loan->repayments as $repayment) {
-                $response = $this->post('/api/v1/repayments/pay/' . $repayment->getId());
+            // Test post to create loan of client
+            $date = Carbon::now();
+            for ($i = 0; $i < 6; $i++) {
+                $date->addMonth($i);
+                $response = $this->post('/api/v1/loans/create', [
+                    'clientId' => $client->getId(),
+                    Loan::AMOUNT => 1000,
+                    Loan::DURATION => 12,
+                    Loan::REPAYMENT_FREQUENCY => RepaymentFrequency::MONTHLY['id'],
+                    Loan::INTEREST_RATE => 0.1,
+                    Loan::ARRANGEMENT_FEE => 100,
+                    Loan::REMARKS => null,
+                    Loan::DATE_CONTRACT_START => $date . '',
+                ]);
                 $response->assertStatus(200);
+                $responseData = $response->baseResponse->getData(true);
+                $loanId = $responseData['loan']['id'];
+                $loan = Loan::find($loanId);
+                $this->assertNotNull($loan);
 
-                // Assert not allow repay for paid repayment
-                $response = $this->post('/api/v1/repayments/pay/' . $repayment->getId());
-                $response->assertStatus(400);
+                // Test duplicate generated repayment
+                $repaymentRepository = new RepaymentRepository();
+                $success = $repaymentRepository->generateRepayments($bag, $loan);
+                $this->assertFalse($success);
+
+                // Test post to get loans of client
+                $perPage = 2;
+                $response = $this->post('/api/v1/loans/get', [
+                    'perPage' => $perPage,
+                    'clientId' => $client->getId(),
+                ]);
+                $response->assertStatus(200);
+                $responseData = $response->baseResponse->getData(true);
+                $data = $responseData['data'];
+                $loanCount = \count($data);
+                $this->assertTrue($loanCount <= $perPage);
+                $this->assertTrue($responseData['meta']['total'] == $i + 1);
+
+                // Test post to get loan
+                $requestId = $data[0]['id'];
+                $response = $this->post('/api/v1/loans/get/' . $requestId);
+                $response->assertStatus(200);
+                $responseData = $response->baseResponse->getData(true);
+                $responseId = $responseData['data']['id'];
+                $this->assertTrue($requestId == $responseId);
+
+                // Assert repayments
+                $repayments = $loan->repayments;
+                $this->assertTrue($loan->getMonthsDuration() == $repayments->count());
+
+                // Assert repay
+                foreach ($loan->repayments as $repayment) {
+                    $response = $this->post('/api/v1/repayments/pay/' . $repayment->getId());
+                    $response->assertStatus(200);
+
+                    // Assert not allow repay for paid repayment
+                    $response = $this->post('/api/v1/repayments/pay/' . $repayment->getId());
+                    $response->assertStatus(400);
+                }
             }
-
-            // Test post to get loans of client
-            $response = $this->post('/api/v1/loans/get_freq_type');
-            $response->assertStatus(200);
-            $types = RepaymentFrequency::toArrayForApi();
-            $response->assertJson([
-                "types" => $types,
-            ]);
         }
 
         // Clear current test database records
