@@ -30,6 +30,7 @@ class HttpTest extends TestCase
     /**
      * Test post api
      */
+    // FIXME: make test in different function
     public function testBasicTest()
     {
         DB::beginTransaction();
