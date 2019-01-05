@@ -4,6 +4,9 @@ namespace App\Components\CoreComponent\Modules\Loan;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
+/*
+ * Author: Raksa Eng
+ */
 class LoanCollection extends ResourceCollection
 {
     /**

@@ -5,6 +5,9 @@ namespace App\Components\CoreComponent\Modules\Client;
 use App\Components\CoreComponent\Modules\Loan\LoanCollection;
 use Illuminate\Http\Resources\Json\Resource;
 
+/*
+ * Author: Raksa Eng
+ */
 class ClientResource extends Resource
 {
     /**

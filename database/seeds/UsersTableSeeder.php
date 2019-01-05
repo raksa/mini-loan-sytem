@@ -2,6 +2,9 @@
 use App\User;
 use Illuminate\Database\Seeder;
 
+/*
+ * Author: Raksa Eng
+ */
 class UsersTableSeeder extends Seeder
 {
     /**

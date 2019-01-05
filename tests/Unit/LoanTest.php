@@ -6,6 +6,9 @@ use App\Helpers\LoanCalculator;
 use App\Http\Middleware\AuthenticateAPIOnce;
 use Illuminate\Foundation\Testing\TestCase;
 
+/*
+ * Author: Raksa Eng
+ */
 class LoanTest extends TestCase
 {
     public function createApplication()

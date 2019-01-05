@@ -5,6 +5,9 @@ namespace App\Components\CoreComponent\Modules\Repayment;
 use App\Components\CoreComponent\Modules\Client\ClientResource;
 use Illuminate\Http\Resources\Json\Resource;
 
+/*
+ * Author: Raksa Eng
+ */
 class RepaymentResource extends Resource
 {
     /**

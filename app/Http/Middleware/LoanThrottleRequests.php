@@ -5,6 +5,9 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 
+/*
+ * Author: Raksa Eng
+ */
 class LoanThrottleRequests extends ThrottleRequests
 {
     /*

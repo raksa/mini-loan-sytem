@@ -4,7 +4,6 @@ namespace App\Helpers;
 /*
  * Author: Raksa Eng
  */
-
 class LoanCalculator
 {
     /**

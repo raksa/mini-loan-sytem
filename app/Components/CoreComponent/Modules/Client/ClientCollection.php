@@ -4,6 +4,9 @@ namespace App\Components\CoreComponent\Modules\Client;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
+/*
+ * Author: Raksa Eng
+ */
 class ClientCollection extends ResourceCollection
 {
     /**

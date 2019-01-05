@@ -8,7 +8,6 @@ use Illuminate\Foundation\Http\FormRequest;
 /*
  * Author: Raksa Eng
  */
-
 class RepaymentRequest extends FormRequest
 {
     /**

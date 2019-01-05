@@ -7,7 +7,6 @@ use Illuminate\Foundation\Http\FormRequest;
 /*
  * Author: Raksa Eng
  */
-
 class LoanRequest extends FormRequest
 {
     /**

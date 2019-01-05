@@ -6,6 +6,9 @@ use App\Components\CoreComponent\Modules\Repayment\RepaymentCollection;
 use App\Components\CoreComponent\Modules\Client\ClientResource;
 use Illuminate\Http\Resources\Json\Resource;
 
+/*
+ * Author: Raksa Eng
+ */
 class LoanResource extends Resource
 {
     /**

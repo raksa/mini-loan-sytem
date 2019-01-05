@@ -4,6 +4,9 @@ namespace App\Components\CoreComponent\Modules\Repayment;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
+/*
+ * Author: Raksa Eng
+ */
 class RepaymentCollection extends ResourceCollection
 {
     /**
