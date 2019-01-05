@@ -19,7 +19,7 @@ class LoanRepository
         $result = Loan::orderBy(Loan::ID, 'desc');
         if (isset($data["client"])) {
             $client = $data["client"];
-            $result = $result->where(Loan::CLIENT_ID, $client->getId());
+            $result = $result->where(Loan::CLIENT_ID, $client->id);
         }
         $loans = $result->paginate($data['perPage']);
         return $loans;
@@ -34,7 +34,7 @@ class LoanRepository
      */
     public function createLoan(Client $client, $data = [])
     {
-        $data[Loan::CLIENT_ID] = $client->getId();
+        $data[Loan::CLIENT_ID] = $client->id;
         $loan = new Loan();
         $loan->setProps($data);
         return $loan->save() ? $loan : null;

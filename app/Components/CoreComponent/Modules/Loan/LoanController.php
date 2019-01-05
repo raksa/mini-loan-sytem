@@ -29,7 +29,7 @@ class LoanController extends Controller
      */
     public function apiCreateLoan(Request $request)
     {
-        $client = Client::find($request->get('clientId'));
+        $client = Client::active()->find($request->get('clientId'));
         if (!$client) {
             return response()->json([
                 "status" => "error",
@@ -78,7 +78,7 @@ class LoanController extends Controller
                 "perPage" => $request->get("perPage") ?? 20,
             ];
             if ($request->has('clientId')) {
-                $client = Client::find($request->get('clientId'));
+                $client = Client::active()->find($request->get('clientId'));
                 if (!$client) {
                     return response()->json(['message' => trans("default.client_not_found")], 404);
                 } else {

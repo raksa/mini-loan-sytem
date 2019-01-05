@@ -2,94 +2,87 @@
 namespace App\Components\CoreComponent\Modules\Client;
 
 use App\Components\CoreComponent\Modules\Loan\Loan;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-// TODO: use all eloquent features
 /*
  * Author: Raksa Eng
  */
 class Client extends Model
 {
+    use SoftDeletes;
+    protected $table = 'clients';
+    protected $primaryKey = 'id';
+    protected $fillable = [
+        'active',
+        'client_code',
+        'first_name',
+        'last_name',
+        'phone_number',
+        'address',
+    ];
+    protected $attributes = [
+        'active' => true,
+    ];
+    protected $casts = [
+        'active' => 'boolean',
+    ];
+    protected $hidden = [
+        'active',
+        'deleted_at'
+    ];
 
-    const TABLE_NAME = 'clients';
-
-    const ID = 'id';
-    const CLIENT_CODE = 'client_code'; //special string to make unique identify client
-    const FIRST_NAME = 'first_name';
-    const LAST_NAME = 'last_name';
-    const PHONE_NUMBER = 'phone_number';
-    const ADDRESS = 'address';
-    const LAST_UPDATED = 'last_updated';
-    const CREATED = 'created';
-
-    // Disable default timestamp to easy control
-    public $timestamps = false;
-
-    protected $primaryKey = self::ID;
-
-    protected $table = self::TABLE_NAME;
-
-    public function getId()
+    public function setFirstNameAttribute($value)
     {
-        return $this->{self::ID};
+        $this->attributes['first_name'] = strtolower($value);
     }
-    public function getClientCode()
+    public function getFirstNameAttribute($value)
     {
-        return $this->{self::CLIENT_CODE};
+        return ucfirst($value);
     }
-    public function getFirstName()
+    public function getLastNameAttribute($value)
     {
-        return $this->{self::FIRST_NAME};
+        return ucfirst($value);
     }
-    public function getLastName()
+    public function getFullNameAttribute()
     {
-        return $this->{self::LAST_NAME};
-    }
-    public function getPhoneNumber()
-    {
-        return $this->{self::PHONE_NUMBER};
-    }
-    public function getAddress()
-    {
-        return $this->{self::ADDRESS};
-    }
-    public function getLastUpdatedTime()
-    {
-        return new Carbon($this->{self::LAST_UPDATED});
-    }
-    public function getCreatedTime()
-    {
-        return new Carbon($this->{self::CREATED});
+        return "{$this->first_name} {$this->last_name}";
     }
 
-    public function setProps($data)
+    public function scopeActive($query)
     {
-        $this->{self::FIRST_NAME} = $data[self::FIRST_NAME];
-        $this->{self::LAST_NAME} = $data[self::LAST_NAME];
-        $this->{self::PHONE_NUMBER} = $data[self::PHONE_NUMBER];
-        isset($data[self::ADDRESS]) && ($this->{self::ADDRESS} = $data[self::ADDRESS]);
-        $this->{self::CLIENT_CODE} = $data[self::CLIENT_CODE];
+        return $query->where('active', 1);
+    }
+    public function scopeOrderDesc($query)
+    {
+        return $query->orderBy('id', 'desc');
     }
 
-    /**
-     * Association one to many, one client can belong to many loans.
-     */
     public function loans()
     {
-        return $this->hasMany(Loan::class,
-            Loan::CLIENT_ID,
-            self::ID);
+        return $this->hasMany(Loan::class, 'id', 'id');
     }
 
-    /**
-     * Force delete this record
-     */
-    public function deleteThis()
+    public function activate($isActive)
     {
         foreach ($this->loans as $loan) {
-            $loan->deleteThis();
+            $loan->activate($isActive);
         }
-        $this->delete();
+        $this->active = $isActive;
+        return $this->save();
+    }
+    public function delete()
+    {
+        foreach ($this->loans as $loan) {
+            $loan->delete();
+        }
+        return parent::delete();
+    }
+    public function forceDelete()
+    {
+        foreach ($this->loans as $loan) {
+            $loan->forceDelete();
+        }
+        return parent::forceDelete();
     }
 }

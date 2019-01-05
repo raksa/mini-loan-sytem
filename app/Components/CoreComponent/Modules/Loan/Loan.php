@@ -1,8 +1,8 @@
 <?php
 namespace App\Components\CoreComponent\Modules\Loan;
 
-use App\Components\CoreComponent\Modules\Repayment\Repayment;
 use App\Components\CoreComponent\Modules\Client\Client;
+use App\Components\CoreComponent\Modules\Repayment\Repayment;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -110,19 +110,29 @@ class Loan extends Model
      */
     public function client()
     {
-        return $this->hasOne(Client::class,
-            Client::ID,
-            self::CLIENT_ID);
+        return $this->hasOne(Client::class, 'id', self::CLIENT_ID);
     }
 
-    /**
-     * Force delete this record
-     */
-    public function deleteThis()
+    public function activate($isActive)
+    {
+        foreach ($this->repayments as $repayment) {
+            $repayment->activate($isActive);
+        }
+        $this->active = $isActive;
+        return $this->save();
+    }
+    public function delete()
     {
         foreach ($this->repayments as $repayment) {
             $repayment->delete();
         }
-        $this->delete();
+        return parent::delete();
+    }
+    public function forceDelete()
+    {
+        foreach ($this->repayments as $repayment) {
+            $repayment->forceDelete();
+        }
+        return parent::forceDelete();
     }
 }

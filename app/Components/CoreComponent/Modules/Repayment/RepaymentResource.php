@@ -20,7 +20,7 @@ class RepaymentResource extends Resource
     {
         $repayment = $this->resource;
         $array = $repayment->toArray();
-        $array['client_id'] = $repayment->loan->client->getId();
+        $array['client_id'] = $repayment->loan->client->id;
         return $array;
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
 use App\Components\CoreComponent\Modules\Loan\Loan;
-use App\Components\CoreComponent\Modules\Client\Client;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -21,9 +20,7 @@ class CreateLoansTable extends Migration
         Schema::create(Loan::TABLE_NAME, function (Blueprint $table) {
             $table->increments(Loan::ID);
             $table->integer(Loan::CLIENT_ID, false, true);
-            $table->foreign(Loan::CLIENT_ID)
-                ->references(Client::ID)
-                ->on(Client::TABLE_NAME);
+            $table->foreign(Loan::CLIENT_ID)->references('id')->on('clients');
             $table->double(Loan::AMOUNT, 18, 8)->unsigned();
             $table->integer(Loan::DURATION)->unsigned();
             $table->integer(Loan::REPAYMENT_FREQUENCY)->unsigned();

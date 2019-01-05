@@ -14,7 +14,7 @@ class ClientRepository
      */
     public function filterClient($data = [])
     {
-        $result = Client::orderBy(Client::ID, 'desc');
+        $result = Client::active()->orderDesc();
         $clients = $result->paginate($data['perPage']);
         return $clients;
     }
@@ -27,9 +27,14 @@ class ClientRepository
      */
     public function createClient($data = [])
     {
-        $data[Client::CLIENT_CODE] = $this->generateClientCode();
         $client = new Client();
-        $client->setProps($data);
+        $client->fill([
+            'client_code' => $this->generateClientCode(),
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'phone_number' => $data['phone_number'],
+            'address' => isset($data['address']) ? $data['address'] : null,
+        ]);
         return $client->save() ? $client : null;
     }
 
@@ -38,13 +43,13 @@ class ClientRepository
      */
     public function generateClientCode()
     {
-        $latestClientRecord = Client::orderBy(Client::ID, 'desc')->first();
+        $latestClientRecord = Client::withTrashed()->orderDesc()->first();
         if (!$latestClientRecord) {
             return 'a000000';
         }
-        $clientCode = $latestClientRecord->getClientCode();
+        $clientCode = $latestClientRecord->client_code;
         while (true) {
-            if (!Client::where(Client::CLIENT_CODE, ++$clientCode)->exists()) {
+            if (!Client::where('client_code', ++$clientCode)->exists()) {
                 break;
             }
         }

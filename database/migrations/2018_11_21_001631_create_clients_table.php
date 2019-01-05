@@ -1,6 +1,5 @@
 <?php
 
-use App\Components\CoreComponent\Modules\Client\Client;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,17 +16,16 @@ class CreateClientsTable extends Migration
      */
     public function up()
     {
-        Schema::create(Client::TABLE_NAME, function (Blueprint $table) {
-            $table->increments(Client::ID);
-            $table->string(Client::CLIENT_CODE, 20)->unique();
-            $table->string(Client::FIRST_NAME, 50);
-            $table->string(Client::LAST_NAME, 50);
-            $table->string(Client::PHONE_NUMBER, 50)->unique();
-            $table->longText(Client::ADDRESS)->nullable();
-            $table->timestamp(Client::LAST_UPDATED)->default(
-                DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP')
-            );
-            $table->timestamp(Client::CREATED)->default(DB::raw('CURRENT_TIMESTAMP'));
+        Schema::create('clients', function (Blueprint $table) {
+            $table->increments('id');
+            $table->boolean('active')->default(true);
+            $table->string('client_code', 20)->unique();
+            $table->string('first_name', 50);
+            $table->string('last_name', 50);
+            $table->string('phone_number', 50)->unique();
+            $table->longText('address')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -38,6 +36,6 @@ class CreateClientsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(Client::TABLE_NAME);
+        Schema::dropIfExists('clients');
     }
 }

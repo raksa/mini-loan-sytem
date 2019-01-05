@@ -94,4 +94,10 @@ class Repayment extends Model
             Loan::ID,
             self::LOAN_ID);
     }
+
+    public function activate($isActive)
+    {
+        $this->active = $isActive;
+        return $this->save();
+    }
 }

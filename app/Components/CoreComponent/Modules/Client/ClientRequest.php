@@ -16,17 +16,16 @@ class ClientRequest extends FormRequest
      */
     public function rules()
     {
-        $id = request()->get('client');
+        $id = request()->get("client");
         return static::staticRules($id);
     }
 
     public static function staticRules($id = null)
     {
         return [
-            Client::FIRST_NAME => 'required|max:50',
-            Client::LAST_NAME => 'required|max:50',
-            Client::PHONE_NUMBER => 'required|unique:' .
-            Client::TABLE_NAME . ',' . Client::PHONE_NUMBER . ',' . $id . ',' . Client::ID,
+            'first_name' => "required|max:50",
+            'last_name' => "required|max:50",
+            "phone_number" => "required|unique:clients,phone_number,$id,id",
         ];
     }
 
@@ -42,12 +41,12 @@ class ClientRequest extends FormRequest
     public static function staticMessages()
     {
         return [
-            Client::FIRST_NAME . '.required' => trans('default.client_first_name_required'),
-            Client::FIRST_NAME . '.max' => trans('default.client_first_name_max'),
-            Client::LAST_NAME . '.required' => trans('default.client_last_name_required'),
-            Client::LAST_NAME . '.max' => trans('default.client_last_name_max'),
-            Client::PHONE_NUMBER . '.required' => trans('default.client_phone_required'),
-            Client::PHONE_NUMBER . '.unique' => trans('default.client_phone_unique'),
+            "first_name.required" => trans("default.client_first_name_required"),
+            "first_name.max" => trans("default.client_first_name_max"),
+            "last_name.required" => trans("default.client_last_name_required"),
+            "last_name.max" => trans("default.client_last_name_max"),
+            "phone_number.required" => trans("default.client_phone_required"),
+            "phone_number.unique" => trans("default.client_phone_unique"),
         ];
     }
 }

@@ -51,7 +51,7 @@ class ClientController extends Controller
      * Get client if client"s id is specified
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Components\CoreComponent\Modules\Client\Client::ID $id
+     * @param \App\Components\CoreComponent\Modules\Client\Client::id $id
      */
     public function apiGetClient(Request $request, $id = null)
     {
@@ -60,7 +60,7 @@ class ClientController extends Controller
                 "perPage" => $request->get("perPage") ?? 20,
             ]));
         }
-        $client = Client::find($id);
+        $client = Client::active()->find($id);
         if (!$client) {
             return response()->json(["message" => trans("default.client_not_found")], 404);
         }
