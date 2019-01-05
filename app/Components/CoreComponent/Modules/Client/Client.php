@@ -29,7 +29,7 @@ class Client extends Model
     ];
     protected $hidden = [
         'active',
-        'deleted_at'
+        'deleted_at',
     ];
 
     public function setFirstNameAttribute($value)
@@ -60,7 +60,7 @@ class Client extends Model
 
     public function loans()
     {
-        return $this->hasMany(Loan::class, 'id', 'id');
+        return $this->hasMany(Loan::class);
     }
 
     public function activate($isActive)

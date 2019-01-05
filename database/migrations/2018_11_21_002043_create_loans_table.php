@@ -1,6 +1,5 @@
 <?php
 
-use App\Components\CoreComponent\Modules\Loan\Loan;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,22 +16,21 @@ class CreateLoansTable extends Migration
      */
     public function up()
     {
-        Schema::create(Loan::TABLE_NAME, function (Blueprint $table) {
-            $table->increments(Loan::ID);
-            $table->integer(Loan::CLIENT_ID, false, true);
-            $table->foreign(Loan::CLIENT_ID)->references('id')->on('clients');
-            $table->double(Loan::AMOUNT, 18, 8)->unsigned();
-            $table->integer(Loan::DURATION)->unsigned();
-            $table->integer(Loan::REPAYMENT_FREQUENCY)->unsigned();
-            $table->double(Loan::INTEREST_RATE, 3, 2)->unsigned();
-            $table->double(Loan::ARRANGEMENT_FEE, 18, 8)->unsigned();
-            $table->longText(Loan::REMARKS)->nullable();
-            $table->timestamp(Loan::DATE_CONTRACT_START)->nullable();
-            $table->timestamp(Loan::DATE_CONTRACT_END)->nullable();
-            $table->timestamp(Loan::LAST_UPDATED)->default(
-                DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP')
-            );
-            $table->timestamp(Loan::CREATED)->default(DB::raw('CURRENT_TIMESTAMP'));
+        Schema::create('loans', function (Blueprint $table) {
+            $table->increments('id');
+            $table->boolean('active')->default(true);
+            $table->integer('client_id', false, true);
+            $table->foreign('client_id')->references('id')->on('clients');
+            $table->double('amount', 18, 8)->unsigned();
+            $table->integer('duration')->unsigned();
+            $table->integer('repayment_frequency')->unsigned();
+            $table->double('interest_rate', 3, 2)->unsigned();
+            $table->double('arrangement_fee', 18, 8)->unsigned();
+            $table->longText('remarks')->nullable();
+            $table->timestamp('date_contract_start')->nullable();
+            $table->timestamp('date_contract_end')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -43,6 +41,6 @@ class CreateLoansTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(Loan::TABLE_NAME);
+        Schema::dropIfExists('loans');
     }
 }

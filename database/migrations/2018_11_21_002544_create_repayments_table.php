@@ -1,6 +1,5 @@
 <?php
 
-use App\Components\CoreComponent\Modules\Loan\Loan;
 use App\Components\CoreComponent\Modules\Repayment\Repayment;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -20,10 +19,9 @@ class CreateRepaymentsTable extends Migration
     {
         Schema::create(Repayment::TABLE_NAME, function (Blueprint $table) {
             $table->increments(Repayment::ID);
+            $table->boolean(Repayment::ACTIVE)->default(true);
             $table->integer(Repayment::LOAN_ID, false, true);
-            $table->foreign(Repayment::LOAN_ID)
-                ->references(Loan::ID)
-                ->on(Loan::TABLE_NAME);
+            $table->foreign(Repayment::LOAN_ID)->references('id')->on('loans');
             $table->double(Repayment::AMOUNT, 18, 8)->unsigned();
             $table->integer(Repayment::PAYMENT_STATUS)->unsigned();
             $table->timestamp(Repayment::DUE_DATE)->nullable();

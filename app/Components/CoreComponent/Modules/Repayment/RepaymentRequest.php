@@ -2,7 +2,6 @@
 
 namespace App\Components\CoreComponent\Modules\Repayment;
 
-use App\Components\CoreComponent\Modules\Loan\Loan;
 use Illuminate\Foundation\Http\FormRequest;
 
 /*
@@ -23,7 +22,7 @@ class RepaymentRequest extends FormRequest
     public static function staticRules()
     {
         return [
-            Repayment::LOAN_ID => 'required|exists:' . Loan::TABLE_NAME . ',' . Loan::ID,
+            Repayment::LOAN_ID => 'required|exists:loans,id',
             Repayment::AMOUNT => 'required|numeric',
             Repayment::PAYMENT_STATUS => 'required|numeric',
             Repayment::DUE_DATE => 'required',

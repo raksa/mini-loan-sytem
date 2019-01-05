@@ -10,6 +10,8 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Validator;
 
+// TODO: make update and delete options
+
 /*
  * Author: Raksa Eng
  */
@@ -47,7 +49,7 @@ class LoanController extends Controller
             ], 400);
         }
         DB::beginTransaction();
-        $loan = $this->repository->createLoan($client, $data);
+        $loan = $this->repository->createLoan($bag, $client, $data);
         // use repayment repository to generate repayment base on loan
         $repaymentRepository = new RepaymentRepository();
         if ($loan && $repaymentRepository->generateRepayments($bag, $loan)) {
@@ -60,7 +62,7 @@ class LoanController extends Controller
         DB::rollBack();
         return response()->json([
             "status" => "error",
-            "message" => trans("default.saving_fail"),
+            "message" => $bag['message'],
         ], 500);
     }
 
@@ -87,7 +89,7 @@ class LoanController extends Controller
             }
             return new LoanCollection($this->repository->filterLoan($data));
         }
-        $loan = Loan::find($id);
+        $loan = Loan::active()->find($id);
         if (!$loan) {
             return response()->json(['message' => trans("default.loan_not_found")], 404);
         }

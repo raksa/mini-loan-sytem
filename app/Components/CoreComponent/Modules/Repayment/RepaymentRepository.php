@@ -57,12 +57,12 @@ class RepaymentRepository
      */
     public function generateRepayments(&$bag, Loan $loan)
     {
-        $frequencyType = $loan->getRepaymentFrequencyTypeId();
-        $monthDuration = $loan->getMonthsDuration();
+        $frequencyType = $loan->repayment_frequency;
+        $monthDuration = $loan->duration;
         $calData = [
-            $loan->getAmount(),
-            $loan->getMonthlyInterestRate(),
-            $loan->getMonthsDuration(),
+            $loan->amount,
+            $loan->interest_rate,
+            $loan->duration,
         ];
         if (RepaymentFrequency::isMonthly($frequencyType)) {
             $amount = LoanCalculator::calculateMonthlyRepayment(...$calData);
@@ -71,8 +71,8 @@ class RepaymentRepository
         } else {
             $amount = LoanCalculator::calculateWeeklyRepayment(...$calData);
         }
-        $startDate = $loan->getDateContractStart();
-        $endDate = $loan->getDateContractEnd();
+        $startDate = $loan->date_contract_start;
+        $endDate = $loan->date_contract_end;
         $dueDate = $startDate->copy();
         while (true) {
             if (RepaymentFrequency::isMonthly($frequencyType)) {
@@ -87,7 +87,7 @@ class RepaymentRepository
                 break;
             }
             if (!$this->createRepayment($bag, [
-                Repayment::LOAN_ID => $loan->getId(),
+                Repayment::LOAN_ID => $loan->id,
                 Repayment::AMOUNT => $amount,
                 Repayment::PAYMENT_STATUS => RepaymentStatus::UNPAID["id"],
                 Repayment::DUE_DATE => $dueDate . '',

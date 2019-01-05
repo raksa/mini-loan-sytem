@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Validator;
 
+// TODO: make update and delete options
+
 /*
  * Author: Raksa Eng
  */
@@ -33,7 +35,7 @@ class ClientController extends Controller
                 "errors" => $validator->errors(),
             ], 400);
         }
-        $client = $this->repository->createClient($request->all());
+        $client = $this->repository->createClient($bag, $request->all());
         if ($client) {
             return response()->json([
                 "status" => "success",
@@ -42,7 +44,7 @@ class ClientController extends Controller
         }
         return response()->json([
             "status" => "error",
-            "message" => trans("default.save_client_fail"),
+            "message" => $bag['message'],
         ], 500);
     }
 

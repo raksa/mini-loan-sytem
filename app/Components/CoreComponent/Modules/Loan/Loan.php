@@ -3,106 +3,54 @@ namespace App\Components\CoreComponent\Modules\Loan;
 
 use App\Components\CoreComponent\Modules\Client\Client;
 use App\Components\CoreComponent\Modules\Repayment\Repayment;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-// TODO: use all eloquent features
 /*
  * Author: Raksa Eng
  */
 class Loan extends Model
 {
+    use SoftDeletes;
+    protected $table = 'loans';
+    protected $primaryKey = 'id';
+    protected $fillable = [
+        'active',
+        'client_id',
+        'amount',
+        'duration',
+        'repayment_frequency',
+        'interest_rate',
+        'arrangement_fee',
+        'remarks',
+        'date_contract_start',
+        'date_contract_end',
+    ];
+    protected $attributes = [
+        'active' => true,
+    ];
+    protected $casts = [
+        'active' => 'boolean',
+        'date_contract_start' => 'datetime',
+        'date_contract_end' => 'datetime',
+    ];
+    protected $hidden = [
+        'active',
+        'deleted_at',
+    ];
 
-    const TABLE_NAME = 'loans';
-
-    const ID = 'id';
-    const CLIENT_ID = 'client_id';
-    const AMOUNT = 'amount';
-    const DURATION = 'duration';
-    const REPAYMENT_FREQUENCY = 'repayment_frequency';
-    const INTEREST_RATE = 'interest_rate';
-    const ARRANGEMENT_FEE = 'arrangement_fee';
-    const REMARKS = 'remarks';
-    const DATE_CONTRACT_START = 'date_contract_start';
-    const DATE_CONTRACT_END = 'date_contract_end';
-    const LAST_UPDATED = 'last_updated';
-    const CREATED = 'created';
-
-    // Disable default timestamp to easy control
-    public $timestamps = false;
-
-    protected $primaryKey = self::ID;
-
-    protected $table = self::TABLE_NAME;
-
-    public function getId()
+    public function scopeActive($query)
     {
-        return $this->{self::ID};
+        return $query->where('active', 1);
     }
-    public function getAmount()
+    public function scopeOrderDesc($query)
     {
-        return $this->{self::AMOUNT};
-    }
-    public function getMonthsDuration()
-    {
-        return $this->{self::DURATION};
-    }
-    public function getRepaymentFrequencyTypeId()
-    {
-        return $this->{self::REPAYMENT_FREQUENCY};
-    }
-    public function getMonthlyInterestRate()
-    {
-        return $this->{self::INTEREST_RATE};
-    }
-    public function getArrangementFee()
-    {
-        return $this->{self::ARRANGEMENT_FEE};
-    }
-    public function getRemarks()
-    {
-        return $this->{self::REMARKS};
-    }
-    public function getDateContractStart()
-    {
-        return new Carbon($this->{self::DATE_CONTRACT_START});
-    }
-    public function getDateContractEnd()
-    {
-        return new Carbon($this->{self::DATE_CONTRACT_END});
+        return $query->orderBy('id', 'desc');
     }
 
-    public function getLastUpdatedTime()
-    {
-        return new Carbon($this->{self::LAST_UPDATED});
-    }
-    public function getCreatedTime()
-    {
-        return new Carbon($this->{self::CREATED});
-    }
-
-    public function setProps($data)
-    {
-        $this->{self::CLIENT_ID} = $data[self::CLIENT_ID];
-        $this->{self::AMOUNT} = $data[self::AMOUNT];
-        $this->{self::DURATION} = $data[self::DURATION];
-        $this->{self::REPAYMENT_FREQUENCY} = $data[self::REPAYMENT_FREQUENCY];
-        $this->{self::INTEREST_RATE} = $data[self::INTEREST_RATE];
-        $this->{self::ARRANGEMENT_FEE} = $data[self::ARRANGEMENT_FEE];
-        $this->{self::REMARKS} = $data[self::REMARKS];
-        $this->{self::DATE_CONTRACT_START} = new Carbon($data[self::DATE_CONTRACT_START]);
-        $endDate = $this->getDateContractStart()->copy()->addMonth($this->getMonthsDuration());
-        $this->{self::DATE_CONTRACT_END} = $endDate;
-    }
-
-    /**
-     * Association one to many, one loan can belong to many repayments.
-     */
     public function repayments()
     {
-        return $this->hasMany(Repayment::class,
-            Repayment::LOAN_ID,
-            self::ID);
+        return $this->hasMany(Repayment::class);
     }
 
     /**
@@ -110,7 +58,7 @@ class Loan extends Model
      */
     public function client()
     {
-        return $this->hasOne(Client::class, 'id', self::CLIENT_ID);
+        return $this->hasOne(Client::class, 'id', 'client_id');
     }
 
     public function activate($isActive)

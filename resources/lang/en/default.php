@@ -39,4 +39,9 @@ return [
     "loan_not_found" => "Loan not found",
     "client_not_found" => "Client not found",
     "repayment_exist" => "Repayment exists",
+    "loan_duration_must_greater_1" => "loan_duration_must_greater_1",
+    "loan_amount_must_greater_1" => "loan_amount_must_greater_1",
+    "repayment_frequency_type_invalid" => "repayment_frequency_type_invalid",
+    "loan_cannot_save" => "loan_cannot_save",
+    "client_cannot_save" => "client_cannot_save",
 ];

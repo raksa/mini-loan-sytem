@@ -15,6 +15,7 @@ class Repayment extends Model
     const TABLE_NAME = 'repayments';
 
     const ID = 'id';
+    const ACTIVE = 'active';
     const LOAN_ID = 'loan_id';
     const AMOUNT = 'amount';
     const PAYMENT_STATUS = 'payment_status';
@@ -34,6 +35,10 @@ class Repayment extends Model
     public function getId()
     {
         return $this->{self::ID};
+    }
+    public function getActive()
+    {
+        return $this->{self::ACTIVE};
     }
     public function getAmount()
     {
@@ -90,9 +95,7 @@ class Repayment extends Model
      */
     public function loan()
     {
-        return $this->hasOne(Loan::class,
-            Loan::ID,
-            self::LOAN_ID);
+        return $this->hasOne(Loan::class, 'id', self::LOAN_ID);
     }
 
     public function activate($isActive)

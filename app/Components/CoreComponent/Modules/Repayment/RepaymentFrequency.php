@@ -22,6 +22,14 @@ class RepaymentFrequency
         'description' => 'Weekly repayment frequency',
     ];
 
+    public static function isValidType($typeId)
+    {
+        return \in_array($typeId, [
+            self::MONTHLY['id'],
+            self::FORTNIGHTLY['id'],
+            self::WEEKLY['id'],
+        ]);
+    }
     public static function isMonthly($typeId)
     {
         return $typeId == self::MONTHLY['id'];

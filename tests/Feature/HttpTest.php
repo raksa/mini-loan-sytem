@@ -99,20 +99,26 @@ class HttpTest extends TestCase
         $date = Carbon::now();
         for ($i = 0; $i < 6; $i++) {
             $date->addMonth($i);
-            $response = $this->post('/api/v1/loans/create', [
+            $duration = 12;
+            $loanData = [
                 'clientId' => $client->id,
-                Loan::AMOUNT => 1000,
-                Loan::DURATION => 12,
-                Loan::REPAYMENT_FREQUENCY => RepaymentFrequency::MONTHLY['id'],
-                Loan::INTEREST_RATE => 0.1,
-                Loan::ARRANGEMENT_FEE => 100,
-                Loan::REMARKS => null,
-                Loan::DATE_CONTRACT_START => $date . '',
-            ]);
+                'amount' => 1000,
+                'duration' => $duration,
+                'repayment_frequency' => RepaymentFrequency::MONTHLY['id'],
+                'interest_rate' => 0.1,
+                'arrangement_fee' => 100,
+                'remarks' => null,
+                'date_contract_start' => $date . '',
+            ];
+            $response = $this->post('/api/v1/loans/create', \array_replace($loanData, ['repayment_frequency' => -1]));
+            $response->assertStatus(400);
+            $response = $this->post('/api/v1/loans/create', $loanData);
             $response->assertStatus(200);
+            $this->assertTrue($client->refresh()->loans->count() == $i + 1);
             $responseData = $response->baseResponse->getData(true);
             $loanId = $responseData['loan']['id'];
-            $loan = Loan::find($loanId);
+            $loan = Loan::active()->find($loanId);
+            $this->assertTrue($loan->date_contract_end->diffInMonths($loan->date_contract_start) == $duration);
             $this->assertNotNull($loan);
 
             // Test duplicate generated repayment
@@ -145,7 +151,7 @@ class HttpTest extends TestCase
 
             // Assert repayments
             $repayments = $loan->repayments;
-            $this->assertTrue($loan->getMonthsDuration() == $repayments->count());
+            $this->assertTrue($loan->duration == $repayments->count());
 
             // Assert repay
             foreach ($loan->repayments as $repayment) {
@@ -161,8 +167,14 @@ class HttpTest extends TestCase
         // Assert client activate
         $client->activate(false);
         $this->assertFalse($client->refresh()->active);
+        foreach ($client->loans as $loan) {
+            $this->assertFalse($loan->active);
+        }
         $client->activate(true);
         $this->assertTrue($client->refresh()->active);
+        foreach ($client->loans as $loan) {
+            $this->assertTrue($loan->active);
+        }
 
         // Asset client trashed
         $client->delete();

@@ -22,10 +22,11 @@ class ClientRepository
     /**
      * Create Client
      *
+     * @param array $bag
      * @param array $data
      * @return \App\Components\CoreComponent\Modules\Client\Client|null
      */
-    public function createClient($data = [])
+    public function createClient(&$bag, $data = [])
     {
         $client = new Client();
         $client->fill([
@@ -35,7 +36,11 @@ class ClientRepository
             'phone_number' => $data['phone_number'],
             'address' => isset($data['address']) ? $data['address'] : null,
         ]);
-        return $client->save() ? $client : null;
+        if (!$client->save()) {
+            $bag = ['message' => trans("default.client_cannot_save")];
+            return null;
+        }
+        return $client;
     }
 
     /**
