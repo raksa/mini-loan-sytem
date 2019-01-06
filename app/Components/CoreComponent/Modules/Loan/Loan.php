@@ -3,6 +3,7 @@ namespace App\Components\CoreComponent\Modules\Loan;
 
 use App\Components\CoreComponent\Modules\Client\Client;
 use App\Components\CoreComponent\Modules\Repayment\Repayment;
+use App\Components\CoreComponent\Modules\Repayment\RepaymentFrequency;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -39,6 +40,14 @@ class Loan extends Model
         'deleted_at',
     ];
 
+    public function setRepaymentFrequencyAttribute($value)
+    {
+        if (!RepaymentFrequency::isValidType($value)) {
+            throw new \Exception(trans('default.repayment_frequency_type_invalid'));
+        }
+        $this->attributes['repayment_frequency'] = $value;
+    }
+
     public function scopeActive($query)
     {
         return $query->where('active', 1);
@@ -71,16 +80,34 @@ class Loan extends Model
     }
     public function delete()
     {
+        $success = true;
         foreach ($this->repayments as $repayment) {
-            $repayment->delete();
+            if (!$repayment->delete()) {
+                $success = false;
+            }
         }
-        return parent::delete();
+        return parent::delete() && $success;
     }
-    public function forceDelete()
+    public function forceRestoreThis()
     {
-        foreach ($this->repayments as $repayment) {
-            $repayment->forceDelete();
+        $success = $this->restore();
+        $repayments = Repayment::withTrashed()->where('loan_id', $this->id)->get();
+        foreach ($repayments as $repayment) {
+            if (!$repayment->restore()) {
+                $success = false;
+            }
         }
-        return parent::forceDelete();
+        return $success;
+    }
+    public function forceDeleteThis()
+    {
+        $success = true;
+        $repayments = Repayment::withTrashed()->where('loan_id', $this->id)->get();
+        foreach ($repayments as $repayment) {
+            if (!$repayment->forceDelete()) {
+                $success = false;
+            }
+        }
+        return $this->forceDelete() && $success;
     }
 }

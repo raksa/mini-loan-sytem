@@ -44,4 +44,5 @@ return [
     "repayment_frequency_type_invalid" => "repayment_frequency_type_invalid",
     "loan_cannot_save" => "loan_cannot_save",
     "client_cannot_save" => "client_cannot_save",
+    "invalid_payment_status" => "Invalid payment status id",
 ];

@@ -22,10 +22,10 @@ class RepaymentRequest extends FormRequest
     public static function staticRules()
     {
         return [
-            Repayment::LOAN_ID => 'required|exists:loans,id',
-            Repayment::AMOUNT => 'required|numeric',
-            Repayment::PAYMENT_STATUS => 'required|numeric',
-            Repayment::DUE_DATE => 'required',
+            'loan_id' => 'required|exists:loans,id',
+            'amount' => 'required|numeric',
+            'payment_status' => 'required|numeric',
+            'payment_status' => 'required',
         ];
     }
 
@@ -41,13 +41,13 @@ class RepaymentRequest extends FormRequest
     public static function staticMessages()
     {
         return [
-            Repayment::LOAN_ID . '.required' => trans('default.repayment_loan_id_required'),
-            Repayment::LOAN_ID . '.exists' => trans('default.repayment_loan_not_found'),
-            Repayment::AMOUNT . '.required' => trans('default.repayment_amount_required'),
-            Repayment::AMOUNT . '.numeric' => trans('default.repayment_amount_must_numeric'),
-            Repayment::PAYMENT_STATUS . '.required' => trans('default.repayment_status_id_required'),
-            Repayment::PAYMENT_STATUS . '.numeric' => trans('default.repayment_status_id_must_numeric'),
-            Repayment::DUE_DATE . '.required' => trans('default.repayment_due_date_required'),
+            'loan_id' . '.required' => trans('default.repayment_loan_id_required'),
+            'loan_id' . '.exists' => trans('default.repayment_loan_not_found'),
+            'amount' . '.required' => trans('default.repayment_amount_required'),
+            'amount' . '.numeric' => trans('default.repayment_amount_must_numeric'),
+            'payment_status' . '.required' => trans('default.repayment_status_id_required'),
+            'payment_status' . '.numeric' => trans('default.repayment_status_id_must_numeric'),
+            'payment_status' . '.required' => trans('default.repayment_due_date_required'),
         ];
     }
 }

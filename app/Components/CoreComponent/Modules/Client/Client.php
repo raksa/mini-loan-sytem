@@ -73,16 +73,34 @@ class Client extends Model
     }
     public function delete()
     {
+        $success = true;
         foreach ($this->loans as $loan) {
-            $loan->delete();
+            if (!$loan->delete()) {
+                $success = false;
+            }
         }
-        return parent::delete();
+        return parent::delete() && $success;
     }
-    public function forceDelete()
+    public function forceRestoreThis()
     {
-        foreach ($this->loans as $loan) {
-            $loan->forceDelete();
+        $success = $this->restore();
+        $loans = Loan::withTrashed()->where('client_id', $this->id)->get();
+        foreach ($loans as $loan) {
+            if (!$loan->forceRestoreThis()) {
+                $success = false;
+            }
         }
-        return parent::forceDelete();
+        return $success;
+    }
+    public function forceDeleteThis()
+    {
+        $success = true;
+        $loans = Loan::withTrashed()->where('client_id', $this->id)->get();
+        foreach ($loans as $loan) {
+            if (!$loan->forceDeleteThis()) {
+                $success = false;
+            }
+        }
+        return $this->forceDelete() && $success;
     }
 }

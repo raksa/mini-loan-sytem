@@ -71,7 +71,7 @@ class LoanController extends Controller
      * Get loan if loan"s id is specified
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Components\CoreComponent\Modules\Loan\Loan:ID $id
+     * @param \App\Components\CoreComponent\Modules\Loan\Loan:id $id
      */
     public function apiGetLoan(Request $request, $id = null)
     {

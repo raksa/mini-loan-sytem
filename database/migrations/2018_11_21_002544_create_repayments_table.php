@@ -17,20 +17,18 @@ class CreateRepaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create(Repayment::TABLE_NAME, function (Blueprint $table) {
-            $table->increments(Repayment::ID);
-            $table->boolean(Repayment::ACTIVE)->default(true);
-            $table->integer(Repayment::LOAN_ID, false, true);
-            $table->foreign(Repayment::LOAN_ID)->references('id')->on('loans');
-            $table->double(Repayment::AMOUNT, 18, 8)->unsigned();
-            $table->integer(Repayment::PAYMENT_STATUS)->unsigned();
-            $table->timestamp(Repayment::DUE_DATE)->nullable();
-            $table->timestamp(Repayment::DATE_OF_PAYMENT)->nullable();
-            $table->longText(Repayment::REMARKS)->nullable();
-            $table->timestamp(Repayment::LAST_UPDATED)->default(
-                DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP')
-            );
-            $table->timestamp(Repayment::CREATED)->default(DB::raw('CURRENT_TIMESTAMP'));
+        Schema::create('repayments', function (Blueprint $table) {
+            $table->increments('id');
+            $table->boolean('active')->default(true);
+            $table->integer('loan_id', false, true);
+            $table->foreign('loan_id')->references('id')->on('loans');
+            $table->double('amount', 18, 8)->unsigned();
+            $table->integer('payment_status')->unsigned();
+            $table->timestamp('due_date')->nullable();
+            $table->timestamp('date_of_payment')->nullable();
+            $table->longText('remarks')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -41,6 +39,6 @@ class CreateRepaymentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(Repayment::TABLE_NAME);
+        Schema::dropIfExists('repayments');
     }
 }

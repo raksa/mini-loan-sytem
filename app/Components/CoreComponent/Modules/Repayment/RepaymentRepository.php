@@ -29,8 +29,8 @@ class RepaymentRepository
         }
 
         // ensure no duplicate repayment
-        if (Repayment::where(Repayment::LOAN_ID, $data[Repayment::LOAN_ID])
-            ->where(Repayment::DUE_DATE, $data[Repayment::DUE_DATE])->exists()) {
+        if (Repayment::where('loan_id', $data['loan_id'])
+            ->where('due_date', $data['due_date'])->exists()) {
             $bag = [
                 "message" => trans("default.repayment_exist"),
             ];
@@ -38,7 +38,14 @@ class RepaymentRepository
         }
 
         $repayment = new Repayment();
-        $repayment->setProps($data);
+        $repayment->fill([
+            'loan_id' => $data['loan_id'],
+            'amount' => $data['amount'],
+            'payment_status' => $data['payment_status'],
+            'due_date' => $data['due_date'],
+            'date_of_payment' => $data['date_of_payment'],
+            'remarks' => $data['remarks'],
+        ]);
         if ($repayment->save()) {
             return $repayment;
         }
@@ -87,12 +94,12 @@ class RepaymentRepository
                 break;
             }
             if (!$this->createRepayment($bag, [
-                Repayment::LOAN_ID => $loan->id,
-                Repayment::AMOUNT => $amount,
-                Repayment::PAYMENT_STATUS => RepaymentStatus::UNPAID["id"],
-                Repayment::DUE_DATE => $dueDate . '',
-                Repayment::DATE_OF_PAYMENT => null,
-                Repayment::REMARKS => null,
+                'loan_id' => $loan->id,
+                'amount' => $amount,
+                'payment_status' => RepaymentStatus::UNPAID["id"],
+                'due_date' => $dueDate . '',
+                'date_of_payment' => null,
+                'remarks' => null,
             ])) {
                 return false;
             }

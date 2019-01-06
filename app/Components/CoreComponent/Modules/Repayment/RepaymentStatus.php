@@ -17,6 +17,13 @@ class RepaymentStatus
         'description' => 'Unpaid status',
     ];
 
+    public static function isValidStatus($statusId)
+    {
+        return \in_array($statusId, [
+            self::PAID['id'],
+            self::UNPAID['id'],
+        ]);
+    }
     public static function isPaid($statusId)
     {
         return $statusId == self::PAID['id'];

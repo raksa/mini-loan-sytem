@@ -2,10 +2,13 @@
 
 namespace App\Components\CoreComponent\Modules\Repayment;
 
-use App\Components\CoreComponent\Modules\Loan\Loan;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+
+// TODO: get repayment of client
+// TODO: get over due repayment
+// TODO: get up coming
 
 /*
  * Author: Raksa Eng
@@ -23,7 +26,7 @@ class RepaymentController extends Controller
      * Pay for repayment
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Components\CoreComponent\Modules\Repayment\Repayment::ID $id
+     * @param \App\Components\CoreComponent\Modules\Repayment\Repayment::id $id
      */
     public function apiPay(Request $request, $id)
     {
@@ -37,15 +40,22 @@ class RepaymentController extends Controller
             ], 404);
         }
         // Ensure already paid
-        if (RepaymentStatus::isPaid($repayment->getPaymentStatusId())) {
+        if (RepaymentStatus::isPaid($repayment->payment_status)) {
             DB::rollBack();
             return response()->json([
                 "status" => "error",
                 "message" => trans("default.repayment_already_paid"),
             ], 400);
         }
-        $repayment->setPaymentStatusId(RepaymentStatus::PAID["id"]);
-        $repayment->setRemarks($request->get("remarks"));
+        try {
+            $repayment->payment_status = RepaymentStatus::PAID["id"];
+        } catch (\Exception $e) {
+            return response()->json([
+                "status" => "error",
+                "error" => $e->getMessage(),
+            ], 500);
+        }
+        $repayment->remarks = $request->get("remarks");
         try {
             if ($repayment->save()) {
                 DB::commit();
@@ -67,11 +77,11 @@ class RepaymentController extends Controller
      * Get repayment if repayment"s id is specified
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Components\CoreComponent\Modules\Repayment\Repayment::ID $id
+     * @param \App\Components\CoreComponent\Modules\Repayment\Repayment::id $id
      */
     public function apiGetRepayment(Request $request, $id)
     {
-        $repayment = Repayment::find($id);
+        $repayment = Repayment::active()->find($id);
         if (!$repayment) {
             return response()->json(["message" => trans("default.repayment_not_found")], 404);
         }
