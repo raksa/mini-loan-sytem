@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Components\CoreComponent\Modules\Client\Client;
 use App\Components\CoreComponent\Modules\Loan\Loan;
+use App\Components\CoreComponent\Modules\Repayment\Repayment;
 use App\Components\CoreComponent\Modules\Repayment\RepaymentFrequency;
 use App\Components\CoreComponent\Modules\Repayment\RepaymentRepository;
 use Carbon\Carbon;
@@ -152,14 +153,23 @@ class HttpTest extends TestCase
             // Assert repayments
             $repayments = $loan->repayments;
             $this->assertTrue($loan->duration == $repayments->count());
+            $repayment = $repayments->get(0);
+            // TODO: find good assertion for raise exception
+            $exceptionRaised = false;
+            try {
+                $repayment->payment_status = -1;
+            } catch (\Exception $e) {
+                $exceptionRaised = true;
+            }
+            $this->assertTrue($exceptionRaised);
 
             // Assert repay
             foreach ($loan->repayments as $repayment) {
-                $response = $this->post('/api/v1/repayments/pay/' . $repayment->getId());
+                $response = $this->post('/api/v1/repayments/pay/' . $repayment->id);
                 $response->assertStatus(200);
 
                 // Assert not allow repay for paid repayment
-                $response = $this->post('/api/v1/repayments/pay/' . $repayment->getId());
+                $response = $this->post('/api/v1/repayments/pay/' . $repayment->id);
                 $response->assertStatus(400);
             }
         }
@@ -169,18 +179,49 @@ class HttpTest extends TestCase
         $this->assertFalse($client->refresh()->active);
         foreach ($client->loans as $loan) {
             $this->assertFalse($loan->active);
+            foreach ($loan->repayments as $repayment) {
+                $this->assertFalse($repayment->active);
+            }
         }
         $client->activate(true);
         $this->assertTrue($client->refresh()->active);
         foreach ($client->loans as $loan) {
             $this->assertTrue($loan->active);
+            foreach ($loan->repayments as $repayment) {
+                $this->assertTrue($repayment->active);
+            }
         }
 
         // Asset client trashed
-        $client->delete();
+        $loansCount = $client->loans->count();
+        $this->assertTrue($client->delete());
         $this->assertTrue($client->refresh()->trashed());
-        $client->restore();
+        $this->assertTrue($client->loans->count() == 0);
+        foreach ($client->loans as $loan) {
+            $this->assertTrue($loan->trashed());
+            foreach ($loan->repayments as $repayment) {
+                $this->assertTrue($repayment->trashed());
+            }
+        }
+        $this->assertTrue($client->forceRestoreThis());
         $this->assertFalse($client->refresh()->trashed());
+        $this->assertTrue($client->loans->count() == $loansCount);
+        foreach ($client->loans as $loan) {
+            $this->assertFalse($loan->trashed());
+            foreach ($loan->repayments as $repayment) {
+                $this->assertFalse($repayment->trashed());
+            }
+        }
+
+        $loans = $client->loans;
+        $this->assertTrue($client->forceDeleteThis());
+        $this->assertNull(Client::withTrashed()->find($client->id));
+        foreach ($loans as $loan) {
+            $this->assertNull(Loan::withTrashed()->find($loan->id));
+            foreach ($loan->repayments as $repayment) {
+                $this->assertNull(Repayment::withTrashed()->find($repayment->id));
+            }
+        }
 
         // Clear current test database records
         DB::rollBack();
