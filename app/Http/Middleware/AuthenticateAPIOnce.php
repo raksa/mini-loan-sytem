@@ -57,7 +57,16 @@ class AuthenticateAPIOnce
     }
     private static function dataToString($data = [])
     {
-        $data = \json_decode(\json_encode($data));
+        $data = \array_filter($data, function ($item) {
+            if ($item instanceof UploadedFile) {
+                return false;
+            }
+            if (\is_array($item) && \count($item) && $item[0] instanceof UploadedFile) {
+                return false;
+            }
+            return true;
+        });
+        $data = \json_decode(\json_encode($data), true);
         $text = static::arrayToKeyValueString($data);
         return $text;
     }
