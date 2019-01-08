@@ -25,7 +25,7 @@ class AuthenticateAPIOnce
      */
     public function handle(Request $request, \Closure $next)
     {
-        if (env('APP_ENV') === 'testing') {
+        if (config('app.env') == 'testing') {
             return $next($request);
         }
         $data = $request->all();
