@@ -38,7 +38,7 @@ class LoanController extends Controller
                 "message" => trans("default.client_not_found"),
             ], 404);
         }
-        $data = $request->except('clientId');
+        $data = $request->except('client_id');
         $validator = Validator::make($data, LoanRequest::staticRules(),
             LoanRequest::staticMessages());
         if ($validator->fails()) {
@@ -79,8 +79,8 @@ class LoanController extends Controller
             $data = [
                 "perPage" => $request->get("perPage") ?? 20,
             ];
-            if ($request->has('clientId')) {
-                $client = Client::active()->find($request->get('clientId'));
+            if ($request->has('client_id')) {
+                $client = Client::active()->find($request->get('client_id'));
                 if (!$client) {
                     return response()->json(['message' => trans("default.client_not_found")], 404);
                 } else {

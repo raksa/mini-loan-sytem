@@ -89,7 +89,7 @@ class HttpTest extends TestCase
 
         // Test post to get loans of client
         $response = $this->post('/api/v1/loans/get', [
-            'clientId' => $client->id,
+            'client_id' => $client->id,
         ]);
         $response->assertStatus(200);
         $responseData = $response->baseResponse->getData(true);
@@ -102,7 +102,7 @@ class HttpTest extends TestCase
             $date->addMonth($i);
             $duration = 12;
             $loanData = [
-                'clientId' => $client->id,
+                'client_id' => $client->id,
                 'amount' => 1000,
                 'duration' => $duration,
                 'repayment_frequency' => RepaymentFrequency::MONTHLY['id'],
@@ -131,7 +131,7 @@ class HttpTest extends TestCase
             $perPage = 2;
             $response = $this->post('/api/v1/loans/get', [
                 'perPage' => $perPage,
-                'clientId' => $client->id,
+                'client_id' => $client->id,
             ]);
             $response->assertStatus(200);
             $responseData = $response->baseResponse->getData(true);
