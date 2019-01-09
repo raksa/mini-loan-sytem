@@ -31,7 +31,7 @@ class LoanController extends Controller
      */
     public function apiCreateLoan(Request $request)
     {
-        $client = Client::active()->find($request->get('clientId'));
+        $client = Client::active()->find($request->get('client_id'));
         if (!$client) {
             return response()->json([
                 "status" => "error",
