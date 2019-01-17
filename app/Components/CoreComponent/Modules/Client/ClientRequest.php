@@ -16,7 +16,7 @@ class ClientRequest extends FormRequest
      */
     public function rules()
     {
-        $id = request()->get("client");
+        $id = request()->route("client");
         return static::staticRules($id);
     }
 
